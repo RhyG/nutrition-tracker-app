@@ -2,10 +2,10 @@ import React from "react";
 import { Button } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 
-import styles from "../config/styles";
+import styles from "../config/globalStyles";
 import BurgerMenu from "../components/BurgerMenu";
 
-import FoodJournal from "../screens/FoodJournal";
+import FoodJournal from "../screens/FoodJournal/FoodJournal";
 import Conversions from "../screens/Conversions";
 
 const { headerStyle, headerLeftContainerStyle } = styles;

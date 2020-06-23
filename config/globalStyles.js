@@ -1,6 +1,11 @@
 import { StyleSheet, Platform } from "react-native";
 
-const colours = {};
+const colours = {
+  darkGrey: "#2c2c2c",
+  green: "#3ECF8E",
+  offWhite: "#f5f5f5",
+  lightGrey: "#efefef",
+};
 
 const GlobalStyles = StyleSheet.create({
   headerStyle: {
