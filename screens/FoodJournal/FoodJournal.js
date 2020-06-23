@@ -1,8 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, FlatList, Modal } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  Animated,
+  Dimensions,
+  TouchableHighlight,
+} from "react-native";
 import ActionButton from "react-native-action-button";
 import { AntDesign } from "react-native-vector-icons";
 import { getDay } from "date-fns";
+import { SwipeListView } from "react-native-swipe-list-view";
 
 import useIsInitialRender from "../../hooks/useIsInitialRender";
 import storage from "../../lib/async-storage";
@@ -38,15 +47,17 @@ const defaultData = {
   Friday: [],
 };
 
-const FoodRow = ({ item }) => {
+const FoodRow = ({ item, openEditModal, closeEditModal }) => {
   const { food, calories, protein } = item;
 
   return (
-    <View style={rowContainer}>
-      <Text style={[width50]}>{food}</Text>
-      <Text>{calories}</Text>
-      <Text>{protein}</Text>
-    </View>
+    <TouchableHighlight underlayColor={"#AAA"} onPress={() => handleOpenItemModal(item)}>
+      <View style={rowContainer}>
+        <Text style={[width50]}>{food}</Text>
+        <Text>{calories}</Text>
+        <Text>{protein}</Text>
+      </View>
+    </TouchableHighlight>
   );
 };
 
@@ -107,6 +118,20 @@ export default function FoodJournal({ navigation }) {
     });
   };
 
+  const removeItemFromList = (id) => {};
+
+  const renderHiddenItem = () => (
+    <View style={styles.rowBack}>
+      <View style={[styles.backRightBtn, styles.backRightBtnRight]}>
+        <Text style={styles.backTextWhite} onPress={() => console.log("deleting")}>
+          Delete
+        </Text>
+      </View>
+    </View>
+  );
+
+  const handleOpenItemModal = (item) => {};
+
   return (
     <>
       <View style={container}>
@@ -128,11 +153,25 @@ export default function FoodJournal({ navigation }) {
           <Text style={[tableHeading]}>Calories</Text>
           <Text style={[tableHeading]}>Protein</Text>
         </View>
-        <FlatList
+        {/* <FlatList
           style={tableData}
           data={items[days[day]] || []}
           renderItem={({ item, index }) => <FoodRow item={item} key={index} />}
           keyExtractor={(item) => item.food}
+        /> */}
+        <SwipeListView
+          data={items[days[day]] || []}
+          renderItem={({ item, index }) => (
+            <FoodRow
+              item={item}
+              key={index}
+              openEditModal={handleOpenItemModal}
+              closeEditModal={() => setModalVisible(false)}
+            />
+          )}
+          renderHiddenItem={renderHiddenItem}
+          // leftOpenValue={75}
+          rightOpenValue={-75}
         />
       </View>
       <ActionButton buttonColor={green} hideShadow={true} onPress={() => setModalVisible(true)} />

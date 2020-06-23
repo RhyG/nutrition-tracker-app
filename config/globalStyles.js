@@ -5,6 +5,7 @@ const colours = {
   green: "#3ECF8E",
   offWhite: "#f5f5f5",
   lightGrey: "#efefef",
+  darkBlue: "#2D3E4E",
 };
 
 const GlobalStyles = StyleSheet.create({
@@ -17,8 +18,11 @@ const GlobalStyles = StyleSheet.create({
   headerLeftContainerStyle: {
     marginLeft: Platform.OS === "ios" ? 20 : 20,
   },
+  mtop20: { marginTop: 20 },
   p20: { padding: 20 },
   phorizontal20: { paddingHorizontal: 20 },
+  fontWhite: { color: "#fff" },
+  fontBold: { fontWeight: "bold" },
 });
 
 export default { ...GlobalStyles, ...colours };

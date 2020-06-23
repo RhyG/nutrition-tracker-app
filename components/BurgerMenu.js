@@ -16,9 +16,9 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function BurgerMenu() {
+export default function BurgerMenu({ navigation }) {
   return (
-    <TouchableOpacity style={styles.menuContainer}>
+    <TouchableOpacity style={styles.menuContainer} onPress={() => navigation.openDrawer()}>
       <View style={styles.menuBar} />
       <View style={styles.menuBar} />
       <View style={styles.menuBar} />

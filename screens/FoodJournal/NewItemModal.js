@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { View, Modal, StyleSheet, Text, TextInput, Button } from "react-native";
+import shortid from "shortid";
 
 const styles = StyleSheet.create({
   overlay: {
@@ -53,7 +54,7 @@ export default function NewItemModal({ visible, closeModal, addItemToList }) {
   };
 
   const handleClose = () => {
-    const newItem = item;
+    const newItem = { id: shortid.generate(), ...item };
 
     if (checkAllFields(item)) addItemToList(newItem);
 

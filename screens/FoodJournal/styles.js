@@ -26,11 +26,13 @@ const styles = StyleSheet.create({
     height: "100%",
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-    padding: 30,
+    paddingVertical: 30,
   },
   tableHeadings: {
     flexDirection: "row",
     justifyContent: "space-between",
+    paddingHorizontal: 30,
+    marginBottom: 20,
   },
   tableHeading: {
     fontWeight: "bold",
@@ -48,11 +50,45 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: lightGrey,
     paddingVertical: 15,
+    backgroundColor: "white",
+    flex: 1,
+    paddingHorizontal: 30,
   },
   newItemModal: {
     height: 300,
     width: 300,
     backgroundColor: "red",
+  },
+  backTextWhite: {
+    color: "#FFF",
+  },
+  rowFront: {
+    alignItems: "center",
+    backgroundColor: "#CCC",
+    borderBottomColor: "black",
+    borderBottomWidth: 1,
+    justifyContent: "center",
+    height: 50,
+  },
+  rowBack: {
+    alignItems: "center",
+    backgroundColor: "red",
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingLeft: 15,
+  },
+  backRightBtn: {
+    alignItems: "center",
+    bottom: 0,
+    justifyContent: "center",
+    position: "absolute",
+    top: 0,
+    width: 75,
+  },
+  backRightBtnRight: {
+    backgroundColor: "red",
+    right: 0,
   },
 });
 
