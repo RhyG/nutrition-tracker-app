@@ -15,8 +15,8 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
-  day: {
-    fontSize: 20,
+  currentDay: {
+    fontSize: 16,
   },
   statsContainer: {
     height: 160,
@@ -26,10 +26,11 @@ const styles = StyleSheet.create({
   },
   mealRowsContainer: {
     backgroundColor: "#fff",
-    height: "100%",
+    flex: 1,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
     paddingVertical: 30,
+    paddingBottom: 50,
   },
   tableHeadings: {
     flexDirection: "row",
@@ -50,12 +51,23 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    borderTopWidth: 1,
-    borderTopColor: lightGrey,
-    paddingVertical: 15,
+    paddingVertical: 20,
     backgroundColor: "white",
     flex: 1,
     paddingHorizontal: 30,
+  },
+  dividerOuter: {
+    width: "100%",
+    paddingHorizontal: 30,
+    backgroundColor: "#fff",
+  },
+  dividerInner: {
+    // backgroundColor: lightGrey,
+    height: 1,
+  },
+  rowMacro: {
+    width: 60,
+    textAlign: "right",
   },
   newItemModal: {
     height: 300,

@@ -14,7 +14,8 @@ const GlobalStyles = StyleSheet.create({
     shadowColor: "transparent",
     elevation: 0,
     borderBottomWidth: 0,
-    backgroundColor: "#f5f5f5",
+    borderWidth: 0,
+    shadowOffset: { height: 0, width: 0 },
   },
   headerLeftContainerStyle: {
     marginLeft: Platform.OS === "ios" ? 20 : 20,

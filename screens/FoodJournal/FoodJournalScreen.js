@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useLayoutEffect } from "react";
 import { View, Text, TouchableOpacity, TouchableHighlight } from "react-native";
 import ActionButton from "react-native-action-button";
-import { AntDesign } from "react-native-vector-icons";
 import { getDay } from "date-fns";
 import { SwipeListView } from "react-native-swipe-list-view";
-import { Entypo, MaterialIcons } from "react-native-vector-icons";
+import { Entypo, MaterialIcons, AntDesign } from "react-native-vector-icons";
 
 import globalStyles from "../../config/globalStyles";
 import useIsInitialRender from "../../hooks/useIsInitialRender";
@@ -16,7 +15,7 @@ import styles, { width50 } from "./styles";
 const {
   container,
   dayContainer,
-  day,
+  currentDay,
   statsContainer,
   mealRowsContainer,
   tableHeadings,
@@ -26,10 +25,14 @@ const {
   rowContainer,
   newItemModal,
   headerMenu,
+  macroHeading,
+  rowMacro,
+  dividerOuter,
+  dividerInner,
 } = styles;
 
 import GlobalStyles from "../../config/globalStyles";
-const { green, darkGrey } = GlobalStyles;
+const { green, darkGrey, offWhite, headerStyle } = GlobalStyles;
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
@@ -57,13 +60,18 @@ const FoodRow = ({ item, openEditModal, closeEditModal, handleOpenItemModal }) =
   const { food, calories, protein } = item;
 
   return (
-    <TouchableHighlight underlayColor={"#AAA"} onPress={() => handleOpenItemModal(item)}>
-      <View style={rowContainer}>
-        <Text style={[width50]}>{food}</Text>
-        <Text>{calories}</Text>
-        <Text>{protein}</Text>
+    <>
+      <View style={dividerOuter}>
+        <View style={dividerInner} />
       </View>
-    </TouchableHighlight>
+      <TouchableHighlight underlayColor={"#AAA"} onPress={() => handleOpenItemModal(item)}>
+        <View style={rowContainer}>
+          <Text style={[width50]}>{food}</Text>
+          <Text style={[rowMacro]}>{calories}</Text>
+          <Text style={[rowMacro]}>{protein}</Text>
+        </View>
+      </TouchableHighlight>
+    </>
   );
 };
 
@@ -71,15 +79,16 @@ function FoodJournal({ navigation }) {
   const [day, setDay] = useState(getTodayIndex());
   const [modalVisible, setModalVisible] = useState(false);
 
-  const [currentCalories, setCurrentCalories] = useState(0);
-  const [currentProtein, setCurrentProtein] = useState(0);
-
   const [items, setItems] = useState(defaultData);
 
   const isInitialRender = useIsInitialRender();
 
   useLayoutEffect(() => {
     navigation.setOptions({
+      headerStyle: {
+        ...headerStyle,
+        backgroundColor: offWhite,
+      },
       headerRight: () => <HeaderMenu onPress={() => setModalVisible(true)} />,
     });
   }, [navigation]);
@@ -88,11 +97,7 @@ function FoodJournal({ navigation }) {
     const getData = async () => {
       const storedData = await storage.getItem("journalData", defaultData);
       setItems(storedData);
-      // setCurrentCalories(getCurrentCalories(storedData[days[day]]));
-      // setCurrentProtein(getCurrentProtein(storedData[days[day]]));
     };
-    // setItems(defaultData);
-    // storage.removeItem("journalData");
 
     getData();
   }, []);
@@ -135,15 +140,26 @@ function FoodJournal({ navigation }) {
     });
   };
 
-  const removeItemFromList = (id) => {};
+  const removeItemFromList = (id) => {
+    setItems((prevItems) => {
+      const todayFood = prevItems[days[day]].filter((item) => item.id !== id);
+      const updated = {
+        ...prevItems,
+        [days[day]]: todayFood,
+      };
+      return updated;
+    });
+  };
 
-  const renderHiddenItem = () => (
-    <View style={styles.rowBack}>
-      <View style={[styles.backRightBtn, styles.backRightBtnRight]}>
-        <MaterialIcons name="delete" size={22} color="#fff" onPress={() => console.log("deleting")} />
-      </View>
-    </View>
-  );
+  const renderHiddenItem = ({ item }) => {
+    return (
+      <TouchableHighlight style={styles.rowBack} onPress={() => removeItemFromList(item.id)}>
+        <View style={[styles.backRightBtn, styles.backRightBtnRight]}>
+          <MaterialIcons name="delete" size={22} color="#fff" />
+        </View>
+      </TouchableHighlight>
+    );
+  };
 
   const handleOpenItemModal = (item) => {
     console.log(item);
@@ -156,7 +172,7 @@ function FoodJournal({ navigation }) {
           <TouchableOpacity>
             <AntDesign name="left" size={22} color={darkGrey} onPress={() => handleDayChange("left")} />
           </TouchableOpacity>
-          <Text style={[day]}>{days[day]}</Text>
+          <Text style={[currentDay]}>{days[day]}</Text>
           <TouchableOpacity>
             <AntDesign name="right" size={22} color={darkGrey} onPress={() => handleDayChange("right")} />
           </TouchableOpacity>
@@ -170,10 +186,13 @@ function FoodJournal({ navigation }) {
       <View style={mealRowsContainer}>
         <View style={tableHeadings}>
           <Text style={[foodHeading, tableHeading]}>Food</Text>
-          <Text style={[tableHeading]}>Calories</Text>
-          <Text style={[tableHeading]}>Protein</Text>
+          <Text style={[tableHeading, macroHeading]}>Calories</Text>
+          <Text style={[tableHeading, macroHeading]}>Protein</Text>
         </View>
         <SwipeListView
+          useFlatList={true}
+          closeOnRowOpen={true}
+          closeOnRowBeginSwipe={true}
           data={items[days[day]] || []}
           renderItem={({ item, index }) => (
             <FoodRow
@@ -185,11 +204,15 @@ function FoodJournal({ navigation }) {
             />
           )}
           renderHiddenItem={renderHiddenItem}
-          // leftOpenValue={75}
           rightOpenValue={-55}
         />
       </View>
-      <ActionButton buttonColor={green} hideShadow={true} onPress={() => setModalVisible(true)} />
+      <ActionButton
+        buttonColor={green}
+        hideShadow={true}
+        onPress={() => setModalVisible(true)}
+        renderIcon={() => <AntDesign name="plus" size={28} color="#fff" />}
+      />
       <NewItemModal
         visible={modalVisible}
         closeModal={() => setModalVisible(false)}

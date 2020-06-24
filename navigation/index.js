@@ -46,11 +46,7 @@ const JournalNavigator = (props) => {
 const ConversionsNavigator = (props) => {
   return (
     <Stack.Navigator>
-      <Stack.Screen
-        name="Conversions"
-        component={Conversions}
-        options={{ ...headerOptions, headerLeft: () => <BurgerMenu navigation={props.navigation} /> }}
-      />
+      <Stack.Screen name="Conversions" component={Conversions} options={headerOptions} />
     </Stack.Navigator>
   );
 };

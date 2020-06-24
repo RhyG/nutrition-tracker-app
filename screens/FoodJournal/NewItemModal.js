@@ -57,7 +57,7 @@ export default function NewItemModal({ visible, closeModal, addItemToList }) {
     const newItem = { id: shortid.generate(), ...item };
 
     if (checkAllFields(item)) addItemToList(newItem);
-
+    setItem(defaultItem);
     closeModal();
   };
 
