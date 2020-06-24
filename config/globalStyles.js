@@ -6,6 +6,7 @@ const colours = {
   offWhite: "#f5f5f5",
   lightGrey: "#efefef",
   darkBlue: "#2D3E4E",
+  red: "#dc3545",
 };
 
 const GlobalStyles = StyleSheet.create({

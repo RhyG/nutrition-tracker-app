@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
 import globalStyles from "../../config/globalStyles";
-const { fontDark, green, fontBold } = globalStyles;
+const { fontDark, green, red, fontBold } = globalStyles;
 
 const styles = StyleSheet.create({
   statContainer: {
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
   },
   progressBarInner: {
     height: 25,
-    backgroundColor: green,
+    // backgroundColor: green,
     borderRadius: 8,
     zIndex: 1,
   },
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
 });
 
 const calculateRemaining = (max, current) => max - current;
-const calcWidth = (max, current) => (current / max) * 100;
+const calcWidth = (max, current) => (current > max ? 100 : (current / max) * 100);
 
 export default function Stat({ name = "Calories", max = 3000, current = 1500 }) {
   return (
@@ -57,7 +57,12 @@ export default function Stat({ name = "Calories", max = 3000, current = 1500 }) 
             {current} / {max}
           </Text>
         </View>
-        <View style={[styles.progressBarInner, { width: `${calcWidth(max, current)}%` }]} />
+        <View
+          style={[
+            styles.progressBarInner,
+            { width: `${calcWidth(max, current)}%`, backgroundColor: current > max ? red : green },
+          ]}
+        />
       </View>
     </View>
   );

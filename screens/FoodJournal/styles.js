@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
 import GlobalStyles from "../../config/globalStyles";
-const { phorizontal20, offWhite, lightGrey } = GlobalStyles;
+const { phorizontal20, offWhite, lightGrey, red } = GlobalStyles;
 
 const styles = StyleSheet.create({
   container: {
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   },
   rowBack: {
     alignItems: "center",
-    backgroundColor: "red",
+    backgroundColor: red,
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     width: 55,
   },
   backRightBtnRight: {
-    backgroundColor: "red",
+    backgroundColor: red,
     right: 0,
   },
   headerMenu: {
