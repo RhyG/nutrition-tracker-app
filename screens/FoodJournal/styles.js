@@ -19,7 +19,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
   },
   statsContainer: {
-    height: 180,
+    height: 160,
+    paddingTop: 20,
+    paddingBottom: 30,
+    justifyContent: "space-between",
   },
   mealRowsContainer: {
     backgroundColor: "#fff",
@@ -61,6 +64,7 @@ const styles = StyleSheet.create({
   },
   backTextWhite: {
     color: "#FFF",
+    fontWeight: "bold",
   },
   rowFront: {
     alignItems: "center",
@@ -84,11 +88,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     position: "absolute",
     top: 0,
-    width: 75,
+    width: 55,
   },
   backRightBtnRight: {
     backgroundColor: "red",
     right: 0,
+  },
+  headerMenu: {
+    paddingRight: 20,
   },
 });
 

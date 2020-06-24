@@ -22,6 +22,7 @@ const GlobalStyles = StyleSheet.create({
   p20: { padding: 20 },
   phorizontal20: { paddingHorizontal: 20 },
   fontWhite: { color: "#fff" },
+  fontDark: { color: colours.darkGrey },
   fontBold: { fontWeight: "bold" },
 });
 
