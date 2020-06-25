@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { View, Modal, StyleSheet, Text, TextInput, Button } from "react-native";
 import shortid from "shortid";
 
+import globalStyles from "../../config/globalStyles";
+const { offWhite } = globalStyles;
+
 const styles = StyleSheet.create({
   overlay: {
     backgroundColor: "black",
@@ -11,8 +14,8 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   content: {
-    minWidth: "70%",
-    maxWidth: "70%",
+    minWidth: "65%",
+    maxWidth: "65%",
     borderRadius: 4,
     backgroundColor: "#fff",
     padding: 20,
@@ -22,6 +25,25 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  heading: {
+    fontSize: 16,
+    textAlign: "left",
+    width: "100%",
+    marginBottom: 10,
+  },
+  inputLabel: {
+    textAlign: "left",
+    width: "100%",
+    marginBottom: 5,
+  },
+  input: {
+    backgroundColor: offWhite,
+    width: "100%",
+    borderRadius: 4,
+    // height: 20,
+    paddingLeft: 10,
+    paddingVertical: 10,
   },
 });
 
@@ -66,20 +88,24 @@ export default function NewItemModal({ visible, closeModal, addItemToList }) {
       <View style={styles.overlay} />
       <View style={styles.contentWrapper}>
         <View style={styles.content}>
+          <Text style={styles.heading}>Add an item</Text>
+          <Text style={styles.inputLabel}>Food</Text>
           <TextInput
             onChangeText={(text) => handleChange(text, "food")}
-            placeholder="Field"
             value={item.food}
+            style={styles.input}
           />
+          <Text style={[styles.inputLabel, { marginTop: 10 }]}>Calories</Text>
           <TextInput
             onChangeText={(text) => handleChange(text, "calories")}
-            placeholder="Field"
             value={item.calories}
+            style={[styles.input, { marginBottom: 10 }]}
           />
+          <Text style={styles.inputLabel}>Protein</Text>
           <TextInput
             onChangeText={(text) => handleChange(text, "protein")}
-            placeholder="Field"
             value={item.protein}
+            style={styles.input}
           />
           <Button title="Close" onPress={handleClose}>
             CLOSE

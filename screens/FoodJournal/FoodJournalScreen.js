@@ -4,6 +4,7 @@ import ActionButton from "react-native-action-button";
 import { getDay } from "date-fns";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { Entypo, MaterialIcons, AntDesign } from "react-native-vector-icons";
+import { Menu, MenuOptions, MenuOption, MenuTrigger, MenuProvider } from "react-native-popup-menu";
 
 import globalStyles from "../../config/globalStyles";
 import useIsInitialRender from "../../hooks/useIsInitialRender";
@@ -50,9 +51,22 @@ const getCurrentCalories = (arr) => arr.reduce((acc, curr) => acc + Number(curr.
 
 const getCurrentProtein = (arr) => arr.reduce((acc, curr) => acc + Number(curr.protein), 0);
 
-const HeaderMenu = ({ onPress }) => (
+const HeaderMenu = ({ navigation, onPress, clearDay, clearWeek }) => (
   <TouchableOpacity style={headerMenu}>
-    <Entypo name="dots-three-vertical" size={22} color={globalStyles.darkGrey} onPress={onPress} />
+    <Menu>
+      <MenuTrigger children={<Entypo name="dots-three-vertical" size={22} color={globalStyles.darkGrey} />} />
+      <MenuOptions>
+        <MenuOption onSelect={() => navigation.navigate("Conversions")}>
+          <Text>Set goals</Text>
+        </MenuOption>
+        <MenuOption onSelect={clearDay}>
+          <Text>Clear day</Text>
+        </MenuOption>
+        <MenuOption onSelect={clearWeek}>
+          <Text>Clear week</Text>
+        </MenuOption>
+      </MenuOptions>
+    </Menu>
   </TouchableOpacity>
 );
 
@@ -89,7 +103,14 @@ function FoodJournal({ navigation }) {
         ...headerStyle,
         backgroundColor: offWhite,
       },
-      headerRight: () => <HeaderMenu onPress={() => setModalVisible(true)} />,
+      headerRight: () => (
+        <HeaderMenu
+          onPress={() => setModalVisible(true)}
+          navigation={navigation}
+          clearDay={clearDay}
+          clearWeek={clearWeek}
+        />
+      ),
     });
   }, [navigation]);
 
@@ -163,6 +184,17 @@ function FoodJournal({ navigation }) {
 
   const handleOpenItemModal = (item) => {
     console.log(item);
+  };
+
+  const clearDay = () => {
+    setItems((prevItems) => ({
+      ...prevItems,
+      [days[day]]: [],
+    }));
+  };
+
+  const clearWeek = () => {
+    setItems(defaultData);
   };
 
   return (
