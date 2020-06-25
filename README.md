@@ -1,4 +1,4 @@
-# Zipcall - Decentralized Video Chat
+# Nutrition Tracking App
 
 [![Author](https://img.shields.io/badge/Author-rhysgeary-brightgreen)](https://rhysgeary.com)
 [![Repo Link](https://img.shields.io/badge/Repo-Link-black.svg)](https://github.com/RhyG/nutrition-tracker-app)
