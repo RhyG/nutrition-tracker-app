@@ -10,13 +10,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  menuBar: {
-    backgroundColor: "#2c2c2c",
-    height: 3,
-    width: 25,
-    marginBottom: 5,
-    borderRadius: 2,
-  },
 });
 
 export default function BurgerMenu({ navigation }) {

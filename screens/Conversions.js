@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { View, Text, TextInput } from "react-native";
+import { createStackNavigator } from "@react-navigation/stack";
 
-const calToKj = (cal) => Math.round(cal * 4.184);
-const kjToCal = (kj) => Math.round(kj * 0.239006);
+import { calToKj, kjToCal } from "../lib/helpers";
 
-export default function Conversions() {
+const Stack = createStackNavigator();
+
+function Conversions() {
   const [kj, setKj] = useState("");
   const [calories, setCalories] = useState("");
 
@@ -27,3 +29,11 @@ export default function Conversions() {
     </View>
   );
 }
+
+const ConversionsNavigator = ({ headerOptions, navigation }) => (
+  <Stack.Navigator>
+    <Stack.Screen name="Conversions" component={Conversions} options={headerOptions} />
+  </Stack.Navigator>
+);
+
+export default ConversionsNavigator;

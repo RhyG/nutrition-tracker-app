@@ -1,6 +1,8 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
+import { calcRemaining, calcWidth } from "../../lib/helpers";
+
 import globalStyles from "../../config/globalStyles";
 const { fontDark, green, red, fontBold } = globalStyles;
 
@@ -41,15 +43,12 @@ const styles = StyleSheet.create({
   },
 });
 
-const calculateRemaining = (max, current) => max - current;
-const calcWidth = (max, current) => (current > max ? 100 : (current / max) * 100);
-
 export default function Stat({ name = "Calories", max = 3000, current = 1500 }) {
   return (
     <View style={styles.statContainer}>
       <View style={styles.topText}>
         <Text style={[fontDark, fontBold]}>{name}</Text>
-        <Text style={{ color: "#887C7C" }}>{calculateRemaining(max, current)} remaining</Text>
+        <Text style={{ color: "#887C7C" }}>{calcRemaining(max, current)} remaining</Text>
       </View>
       <View style={styles.progressBarOuter}>
         <View style={styles.textContainer}>

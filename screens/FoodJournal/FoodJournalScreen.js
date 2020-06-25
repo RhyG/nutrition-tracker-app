@@ -1,11 +1,13 @@
-import React, { useState, useEffect, useLayoutEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect, useContext } from "react";
 import { View, Text, TouchableOpacity, TouchableHighlight } from "react-native";
 import ActionButton from "react-native-action-button";
 import { getDay } from "date-fns";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { Entypo, MaterialIcons, AntDesign } from "react-native-vector-icons";
 import { Menu, MenuOptions, MenuOption, MenuTrigger, MenuProvider } from "react-native-popup-menu";
+import { createStackNavigator } from "@react-navigation/stack";
 
+import GoalContext from "../../context/GoalContext";
 import globalStyles from "../../config/globalStyles";
 import useIsInitialRender from "../../hooks/useIsInitialRender";
 import storage from "../../lib/async-storage";
@@ -35,6 +37,8 @@ const {
 import GlobalStyles from "../../config/globalStyles";
 const { green, darkGrey, offWhite, headerStyle } = GlobalStyles;
 
+const Stack = createStackNavigator();
+
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
 const getTodayIndex = () => getDay(new Date()) - 1;
@@ -45,6 +49,8 @@ const defaultData = {
   Wednesday: [],
   Thursday: [],
   Friday: [],
+  Saturday: [],
+  Sunday: [],
 };
 
 const getCurrentCalories = (arr) => arr.reduce((acc, curr) => acc + Number(curr.calories), 0);
@@ -56,7 +62,7 @@ const HeaderMenu = ({ navigation, onPress, clearDay, clearWeek }) => (
     <Menu>
       <MenuTrigger children={<Entypo name="dots-three-vertical" size={22} color={globalStyles.darkGrey} />} />
       <MenuOptions>
-        <MenuOption onSelect={() => navigation.navigate("Conversions")}>
+        <MenuOption onSelect={() => navigation.navigate("Goals")}>
           <Text>Set goals</Text>
         </MenuOption>
         <MenuOption onSelect={clearDay}>
@@ -96,6 +102,10 @@ function FoodJournal({ navigation }) {
   const [items, setItems] = useState(defaultData);
 
   const isInitialRender = useIsInitialRender();
+
+  const {
+    goals: { calories, protein },
+  } = useContext(GoalContext);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -210,8 +220,8 @@ function FoodJournal({ navigation }) {
           </TouchableOpacity>
         </View>
         <View style={statsContainer}>
-          <Stat name="Calories" max={3000} current={getCurrentCalories(items[days[day]])} />
-          <Stat name="Protein" max={180} current={getCurrentProtein(items[days[day]])} />
+          <Stat name="Calories" max={calories} current={getCurrentCalories(items[days[day]])} />
+          <Stat name="Protein" max={protein} current={getCurrentProtein(items[days[day]])} />
         </View>
       </View>
 
@@ -254,4 +264,10 @@ function FoodJournal({ navigation }) {
   );
 }
 
-export default FoodJournal;
+const JournalNavigator = ({ headerOptions, navigation }) => (
+  <Stack.Navigator>
+    <Stack.Screen name="Conversions" component={FoodJournal} options={headerOptions} />
+  </Stack.Navigator>
+);
+
+export default JournalNavigator;
