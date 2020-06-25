@@ -6,7 +6,7 @@
 A dead simple daily calorie and protein tracker. Built because all the other apps were overkill for someone who doesn't want to create an account, track graphs and generally has a good idea what the nutritional profile of their food is.
 
 <div align="center">
-  <img width="300" height="auto" src="assets/app_image.png">
+  <img width="300" height="auto" src="assets/app_demo.png">
 </div>
 
 ## Features
