@@ -10,6 +10,7 @@ import BurgerMenu from "../components/BurgerMenu";
 
 import FoodJournal from "../screens/FoodJournal/FoodJournalScreen";
 import Conversions from "../screens/Conversions";
+import Goals from "../screens/Goals/GoalsScreen";
 
 const { headerStyle, headerLeftContainerStyle, darkBlue } = styles;
 
@@ -31,7 +32,6 @@ const headerOptions = (props) => ({
   headerStyle,
   headerLeftContainerStyle,
   headerLeft: () => <BurgerMenu navigation={props.navigation} />,
-  // headerRight: () => <Entypo name="dots-three-vertical" size={22} color={styles.darkGrey} />,
   headerTitleAlign: "center",
 });
 
@@ -51,6 +51,14 @@ const ConversionsNavigator = (props) => {
   );
 };
 
+const GoalsNavigator = (props) => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Conversions" component={Goals} options={headerOptions} />
+    </Stack.Navigator>
+  );
+};
+
 const AppNavigator = ({ navigation }) => {
   return (
     <>
@@ -66,6 +74,7 @@ const AppNavigator = ({ navigation }) => {
         }}
       >
         <Drawer.Screen name="Food Journal" component={JournalNavigator} />
+        <Drawer.Screen name="Goals" component={GoalsNavigator} />
         <Drawer.Screen name="Conversions" component={ConversionsNavigator} />
       </Drawer.Navigator>
       <Sidebar />
