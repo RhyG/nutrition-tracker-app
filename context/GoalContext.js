@@ -22,7 +22,6 @@ function GoalProvider({ children }) {
 
   const updateGoals = async (newGoals) => {
     await storage.setItem("goals", newGoals);
-    console.log(newGoals);
     setGoals(newGoals);
   };
 

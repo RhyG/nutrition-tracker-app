@@ -7,8 +7,9 @@ import Sidebar from "../components/SideMenu";
 import BurgerMenu from "../components/BurgerMenu";
 
 import FoodJournal from "../screens/FoodJournal/FoodJournalScreen";
-import Conversions from "../screens/Conversions";
+import Conversions from "../screens/ConversionsScreen";
 import Goals from "../screens/Goals/GoalsScreen";
+import WeeklyOverview from "../screens/WeeklyOverview/WeeklyOverviewScreen";
 
 const { headerStyle, headerLeftContainerStyle, darkBlue } = styles;
 
@@ -28,6 +29,7 @@ const headerOptions = (props) => ({
 const JournalNavigator = () => <FoodJournal headerOptions={headerOptions} />;
 const ConversionsNavigator = () => <Conversions headerOptions={headerOptions} />;
 const GoalsNavigator = () => <Goals headerOptions={headerOptions} />;
+const WeeklyOverviewNavigator = () => <WeeklyOverview headerOptions={headerOptions} />;
 
 const AppNavigator = ({ navigation }) => {
   return (
@@ -44,6 +46,7 @@ const AppNavigator = ({ navigation }) => {
         }}
       >
         <Drawer.Screen name="Food Journal" component={JournalNavigator} />
+        <Drawer.Screen name="Weekly Overview" component={WeeklyOverviewNavigator} />
         <Drawer.Screen name="Goals" component={GoalsNavigator} />
         <Drawer.Screen name="Conversions" component={ConversionsNavigator} />
       </Drawer.Navigator>

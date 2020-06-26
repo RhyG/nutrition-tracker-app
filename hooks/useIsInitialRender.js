@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from "react";
 
-export default useIsInitialRender = (fn, deps) => {
+export default useIsInitialRender = () => {
   const initialRenderRef = useRef(true);
 
   useEffect(() => {

@@ -8,11 +8,13 @@ import { Menu, MenuOptions, MenuOption, MenuTrigger, MenuProvider } from "react-
 import { createStackNavigator } from "@react-navigation/stack";
 
 import GoalContext from "../../context/GoalContext";
+import JournalContext from "../../context/JournalContext";
 import globalStyles from "../../config/globalStyles";
 import useIsInitialRender from "../../hooks/useIsInitialRender";
 import storage from "../../lib/async-storage";
 import NewItemModal from "./NewItemModal";
 import Stat from "./Stat";
+import { getCurrentCalories, getCurrentProtein } from "../../lib/helpers";
 
 import styles, { width50 } from "./styles";
 const {
@@ -43,21 +45,7 @@ const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
 
 const getTodayIndex = () => getDay(new Date()) - 1;
 
-const defaultData = {
-  Monday: [],
-  Tuesday: [],
-  Wednesday: [],
-  Thursday: [],
-  Friday: [],
-  Saturday: [],
-  Sunday: [],
-};
-
-const getCurrentCalories = (arr) => arr.reduce((acc, curr) => acc + Number(curr.calories), 0);
-
-const getCurrentProtein = (arr) => arr.reduce((acc, curr) => acc + Number(curr.protein), 0);
-
-const HeaderMenu = ({ navigation, onPress, clearDay, clearWeek }) => (
+const HeaderMenu = ({ navigation, onPress, clearDay, clearJournal }) => (
   <TouchableOpacity style={headerMenu}>
     <Menu>
       <MenuTrigger children={<Entypo name="dots-three-vertical" size={22} color={globalStyles.darkGrey} />} />
@@ -68,7 +56,7 @@ const HeaderMenu = ({ navigation, onPress, clearDay, clearWeek }) => (
         <MenuOption onSelect={clearDay}>
           <Text>Clear day</Text>
         </MenuOption>
-        <MenuOption onSelect={clearWeek}>
+        <MenuOption onSelect={clearJournal}>
           <Text>Clear week</Text>
         </MenuOption>
       </MenuOptions>
@@ -99,13 +87,15 @@ function FoodJournal({ navigation }) {
   const [day, setDay] = useState(getTodayIndex());
   const [modalVisible, setModalVisible] = useState(false);
 
-  const [items, setItems] = useState(defaultData);
-
   const isInitialRender = useIsInitialRender();
 
   const {
     goals: { calories, protein },
   } = useContext(GoalContext);
+
+  const { journalData, clearJournal, updateJournal } = useContext(JournalContext);
+
+  const [items, setItems] = useState(journalData);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -118,28 +108,19 @@ function FoodJournal({ navigation }) {
           onPress={() => setModalVisible(true)}
           navigation={navigation}
           clearDay={clearDay}
-          clearWeek={clearWeek}
+          clearJournal={clearJournal}
         />
       ),
     });
   }, [navigation]);
 
   useEffect(() => {
-    const getData = async () => {
-      const storedData = await storage.getItem("journalData", defaultData);
-      setItems(storedData);
-    };
-
-    getData();
-  }, []);
+    if (!isInitialRender) updateJournal(items);
+  }, [items]);
 
   useEffect(() => {
-    const saveData = async () => {
-      await storage.setItem("journalData", items);
-    };
-
-    if (!isInitialRender) saveData();
-  }, [items]);
+    setItems(journalData);
+  }, [journalData]);
 
   const handleDayChange = (direction) => {
     switch (direction) {
@@ -201,10 +182,6 @@ function FoodJournal({ navigation }) {
       ...prevItems,
       [days[day]]: [],
     }));
-  };
-
-  const clearWeek = () => {
-    setItems(defaultData);
   };
 
   return (

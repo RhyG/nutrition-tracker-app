@@ -21,6 +21,8 @@ const GlobalStyles = StyleSheet.create({
     marginLeft: Platform.OS === "ios" ? 20 : 20,
   },
   mtop20: { marginTop: 20 },
+  mtop40: { marginTop: 40 },
+  mtop60: { marginTop: 60 },
   p20: { padding: 20 },
   phorizontal20: { paddingHorizontal: 20 },
   fontWhite: { color: "#fff" },

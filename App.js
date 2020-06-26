@@ -5,8 +5,7 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { MenuProvider } from "react-native-popup-menu";
 
 import { GoalProvider } from "./context/GoalContext";
-
-import Sidebar from "./components/SideMenu";
+import { JournalProvider } from "./context/JournalContext";
 
 import AppNavigator from "./navigation";
 
@@ -15,9 +14,11 @@ export default function App() {
     <NavigationContainer>
       <SafeAreaProvider>
         <MenuProvider>
-          <GoalProvider>
-            <AppNavigator />
-          </GoalProvider>
+          <JournalProvider>
+            <GoalProvider>
+              <AppNavigator />
+            </GoalProvider>
+          </JournalProvider>
         </MenuProvider>
       </SafeAreaProvider>
     </NavigationContainer>
