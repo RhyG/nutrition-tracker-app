@@ -1,20 +1,20 @@
-import React, { useState, useEffect, useLayoutEffect, useContext } from "react";
+import React, { useState, useEffect, useLayoutEffect, useContext, useCallback } from "react";
 import { View, Text, TouchableOpacity, TouchableHighlight } from "react-native";
 import ActionButton from "react-native-action-button";
 import { getDay } from "date-fns";
 import { SwipeListView } from "react-native-swipe-list-view";
-import { Entypo, MaterialIcons, AntDesign } from "react-native-vector-icons";
-import { Menu, MenuOptions, MenuOption, MenuTrigger, MenuProvider } from "react-native-popup-menu";
+import { MaterialIcons, AntDesign } from "react-native-vector-icons";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import GoalContext from "../../context/GoalContext";
 import JournalContext from "../../context/JournalContext";
-import globalStyles from "../../config/globalStyles";
 import useIsInitialRender from "../../hooks/useIsInitialRender";
-import storage from "../../lib/async-storage";
 import NewItemModal from "./NewItemModal";
 import Stat from "./Stat";
+import HeaderMenu from "./HeaderMenu";
 import { getCurrentCalories, getCurrentProtein } from "../../lib/helpers";
+
+import dummyData from "../../dummyData";
 
 import styles, { width50 } from "./styles";
 const {
@@ -29,11 +29,12 @@ const {
   tableData,
   rowContainer,
   newItemModal,
-  headerMenu,
   macroHeading,
   rowMacro,
   dividerOuter,
   dividerInner,
+  eatSomethingContainer,
+  eatSomething,
 } = styles;
 
 import GlobalStyles from "../../config/globalStyles";
@@ -43,49 +44,24 @@ const Stack = createStackNavigator();
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-const getTodayIndex = () => getDay(new Date()) - 1;
-
-const HeaderMenu = ({ navigation, onPress, clearDay, clearJournal }) => (
-  <TouchableOpacity style={headerMenu}>
-    <Menu>
-      <MenuTrigger children={<Entypo name="dots-three-vertical" size={22} color={globalStyles.darkGrey} />} />
-      <MenuOptions>
-        <MenuOption onSelect={() => navigation.navigate("Goals")}>
-          <Text>Set goals</Text>
-        </MenuOption>
-        <MenuOption onSelect={clearDay}>
-          <Text>Clear day</Text>
-        </MenuOption>
-        <MenuOption onSelect={clearJournal}>
-          <Text>Clear week</Text>
-        </MenuOption>
-      </MenuOptions>
-    </Menu>
-  </TouchableOpacity>
-);
-
 const FoodRow = ({ item, openEditModal, closeEditModal, handleOpenItemModal }) => {
   const { food, calories, protein } = item;
 
   return (
-    <>
-      <View style={dividerOuter}>
-        <View style={dividerInner} />
+    <TouchableHighlight underlayColor={"#AAA"} onPress={() => handleOpenItemModal(item)}>
+      <View style={rowContainer}>
+        <Text style={[width50]}>{food}</Text>
+        <Text style={[rowMacro]}>{calories}</Text>
+        <Text style={[rowMacro]}>{protein}</Text>
       </View>
-      <TouchableHighlight underlayColor={"#AAA"} onPress={() => handleOpenItemModal(item)}>
-        <View style={rowContainer}>
-          <Text style={[width50]}>{food}</Text>
-          <Text style={[rowMacro]}>{calories}</Text>
-          <Text style={[rowMacro]}>{protein}</Text>
-        </View>
-      </TouchableHighlight>
-    </>
+    </TouchableHighlight>
   );
 };
 
 function FoodJournal({ navigation }) {
-  const [day, setDay] = useState(getTodayIndex());
   const [modalVisible, setModalVisible] = useState(false);
+  const [day, setDay] = useState(days[getDay(new Date()) - 1]);
+  const [editingItem, setEditingItem] = useState();
 
   const isInitialRender = useIsInitialRender();
 
@@ -112,7 +88,7 @@ function FoodJournal({ navigation }) {
         />
       ),
     });
-  }, [navigation]);
+  }, [navigation, day]);
 
   useEffect(() => {
     if (!isInitialRender) updateJournal(items);
@@ -122,31 +98,34 @@ function FoodJournal({ navigation }) {
     setItems(journalData);
   }, [journalData]);
 
-  const handleDayChange = (direction) => {
-    switch (direction) {
-      case "left":
-        if (day > 0) {
-          setDay(day - 1);
-          return;
-        } else {
-          return;
-        }
-      case "right":
-        if (day < 6) {
-          setDay(day + 1);
-          return;
-        } else {
-          return;
-        }
-    }
-  };
+  const handleDayChange = useCallback(
+    (direction) => {
+      switch (direction) {
+        case "left":
+          if (days.indexOf(day) > 0) {
+            setDay(days[days.indexOf(day) - 1]);
+            return;
+          } else {
+            return;
+          }
+        case "right":
+          if (days.indexOf(day) < 6) {
+            setDay(days[days.indexOf(day) + 1]);
+            return;
+          } else {
+            return;
+          }
+      }
+    },
+    [day]
+  );
 
   const addItemToList = (item) => {
     setItems((prevItems) => {
-      const todayFood = [...prevItems[days[day]], item];
+      const todayFood = [...prevItems[day], item];
       const updated = {
         ...prevItems,
-        [days[day]]: todayFood,
+        [day]: todayFood,
       };
       return updated;
     });
@@ -154,10 +133,10 @@ function FoodJournal({ navigation }) {
 
   const removeItemFromList = (id) => {
     setItems((prevItems) => {
-      const todayFood = prevItems[days[day]].filter((item) => item.id !== id);
+      const todayFood = prevItems[day].filter((item) => item.id !== id);
       const updated = {
         ...prevItems,
-        [days[day]]: todayFood,
+        [day]: todayFood,
       };
       return updated;
     });
@@ -174,14 +153,26 @@ function FoodJournal({ navigation }) {
   };
 
   const handleOpenItemModal = (item) => {
+    setEditingItem(item);
+    setModalVisible(true);
+  };
+
+  const updateItem = (item) => {
     console.log(item);
   };
 
   const clearDay = () => {
-    setItems((prevItems) => ({
-      ...prevItems,
-      [days[day]]: [],
-    }));
+    console.log(`Clearing ${day}`);
+    setItems((prevItems) => {
+      console.log(day);
+      const x = {
+        ...prevItems,
+        [day]: [],
+      };
+
+      console.log(x);
+      return x;
+    });
   };
 
   return (
@@ -191,40 +182,49 @@ function FoodJournal({ navigation }) {
           <TouchableOpacity>
             <AntDesign name="left" size={22} color={darkGrey} onPress={() => handleDayChange("left")} />
           </TouchableOpacity>
-          <Text style={[currentDay]}>{days[day]}</Text>
+          <Text style={[currentDay]}>{day}</Text>
           <TouchableOpacity>
             <AntDesign name="right" size={22} color={darkGrey} onPress={() => handleDayChange("right")} />
           </TouchableOpacity>
         </View>
         <View style={statsContainer}>
-          <Stat name="Calories" max={calories} current={getCurrentCalories(items[days[day]])} />
-          <Stat name="Protein" max={protein} current={getCurrentProtein(items[days[day]])} />
+          <Stat name="Calories" max={calories} current={getCurrentCalories(items[day])} />
+          <Stat name="Protein" max={protein} current={getCurrentProtein(items[day])} />
         </View>
       </View>
 
       <View style={mealRowsContainer}>
-        <View style={tableHeadings}>
-          <Text style={[foodHeading, tableHeading]}>Food</Text>
-          <Text style={[tableHeading, macroHeading]}>Calories</Text>
-          <Text style={[tableHeading, macroHeading]}>Protein</Text>
-        </View>
-        <SwipeListView
-          useFlatList={true}
-          closeOnRowOpen={true}
-          closeOnRowBeginSwipe={true}
-          data={items[days[day]] || []}
-          renderItem={({ item, index }) => (
-            <FoodRow
-              item={item}
-              key={index}
-              openEditModal={handleOpenItemModal}
-              closeEditModal={() => setModalVisible(false)}
-              handleOpenItemModal={() => handleOpenItemModal(item)}
+        {items[day].length > 0 ? (
+          <>
+            <View style={tableHeadings}>
+              <Text style={[foodHeading, tableHeading]}>Food</Text>
+              <Text style={[tableHeading, macroHeading]}>Calories</Text>
+              <Text style={[tableHeading, macroHeading]}>Protein</Text>
+            </View>
+            <SwipeListView
+              useFlatList={true}
+              disableRightSwipe={true}
+              closeOnRowOpen={true}
+              closeOnRowBeginSwipe={true}
+              data={items[day] || []}
+              renderItem={({ item, index }) => (
+                <FoodRow
+                  item={item}
+                  key={index}
+                  openEditModal={handleOpenItemModal}
+                  closeEditModal={() => setModalVisible(false)}
+                  handleOpenItemModal={() => handleOpenItemModal(item)}
+                />
+              )}
+              renderHiddenItem={renderHiddenItem}
+              rightOpenValue={-55}
             />
-          )}
-          renderHiddenItem={renderHiddenItem}
-          rightOpenValue={-55}
-        />
+          </>
+        ) : (
+          <View style={eatSomethingContainer}>
+            <Text style={eatSomething}>Eat something</Text>
+          </View>
+        )}
       </View>
       <ActionButton
         buttonColor={green}
@@ -236,6 +236,8 @@ function FoodJournal({ navigation }) {
         visible={modalVisible}
         closeModal={() => setModalVisible(false)}
         addItemToList={addItemToList}
+        item={editingItem}
+        updateItem={updateItem}
       />
     </>
   );

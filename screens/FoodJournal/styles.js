@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 20,
+    paddingVertical: 10,
     backgroundColor: "white",
     flex: 1,
     paddingHorizontal: 30,
@@ -109,6 +109,12 @@ const styles = StyleSheet.create({
   headerMenu: {
     paddingRight: 20,
   },
+  eatSomethingContainer: {
+    justifyContent: "center",
+    height: "100%",
+    alignItems: "center",
+  },
+  eatSomething: {},
 });
 
 export const width50 = {

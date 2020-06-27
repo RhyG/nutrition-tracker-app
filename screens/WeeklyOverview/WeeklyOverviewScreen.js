@@ -1,6 +1,7 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { Menu, MenuOptions, MenuTrigger, renderers } from "react-native-popup-menu";
 
 import GoalContext from "../../context/GoalContext";
 import JournalContext from "../../context/JournalContext";
@@ -8,6 +9,8 @@ import { calcHeight, getCurrentCalories, getCurrentProtein } from "../../lib/hel
 import globalStyles from "../../config/globalStyles";
 
 const { green, red, darkGrey, mtop60, mtop20 } = globalStyles;
+
+const { Popover } = renderers;
 
 const Stack = createStackNavigator();
 
@@ -42,7 +45,7 @@ const styles = StyleSheet.create({
   barsContainer: {
     width: "100%",
     alignItems: "center",
-    marginTop: 30,
+    marginTop: 20,
   },
   bars: {
     flexDirection: "row",
@@ -68,6 +71,17 @@ const styles = StyleSheet.create({
     color: darkGrey,
     fontSize: 16,
   },
+  optionsContainer: {
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius: 6,
+    backgroundColor: "#E8E8E8",
+    shadowOffset: {
+      width: 0,
+      height: 0,
+    },
+    shadowOpacity: 0,
+  },
 });
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -92,7 +106,7 @@ const getAverages = (data = {}) => {
 };
 
 function WeeklyOverview() {
-  const [averages, setAverages] = useState({ claories: 0, protein: 0 });
+  const [averages, setAverages] = useState({ calories: 0, protein: 0 });
 
   const { goals } = useContext(GoalContext);
   const { journalData } = useContext(JournalContext);
@@ -103,30 +117,36 @@ function WeeklyOverview() {
 
   const Bar = ({ day, type }) => {
     const todayFood = journalData[day] || [];
+    const currentCalories = getCurrentCalories(todayFood);
+    const currentProtein = getCurrentProtein(todayFood);
 
-    let amount;
-
-    if (type === "calories") {
-      amount = getCurrentCalories(todayFood);
-    } else {
-      amount = getCurrentProtein(todayFood);
-    }
+    const amount = type === "calories" ? currentCalories : currentProtein;
 
     return (
-      <View style={styles.barContainer}>
-        <View style={styles.barOuter}>
-          <View
-            style={[
-              styles.barInner,
-              {
-                backgroundColor: type === "calories" && amount > goals[type] ? red : green,
-                height: `${calcHeight(goals[type], amount)}%`,
-              },
-            ]}
-          />
-        </View>
-        <Text style={styles.day}>{day.substring(0, 3)}</Text>
-      </View>
+      <Menu renderer={Popover} rendererProps={{ preferredPlacement: "top" }}>
+        <MenuTrigger
+          style={styles.barContainer}
+          customStyles={{
+            TriggerTouchableComponent: TouchableWithoutFeedback,
+          }}
+        >
+          <View style={styles.barOuter}>
+            <View
+              style={[
+                styles.barInner,
+                {
+                  backgroundColor: type === "calories" && amount > goals[type] ? red : green,
+                  height: `${calcHeight(goals[type], amount)}%`,
+                },
+              ]}
+            />
+          </View>
+          <Text style={styles.day}>{day.substring(0, 3)}</Text>
+        </MenuTrigger>
+        <MenuOptions style={styles.menuOptions} customStyles={{ optionsContainer: styles.optionsContainer }}>
+          <Text style={styles.contentText}>{type === "calories" ? currentCalories : currentProtein}</Text>
+        </MenuOptions>
+      </Menu>
     );
   };
 
