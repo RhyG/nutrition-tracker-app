@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useLayoutEffect, useContext, useCallback } from "react";
+import React, { useState, useEffect, useLayoutEffect, useContext, useCallback, useRef } from "react";
 import { View, Text, TouchableOpacity, TouchableHighlight } from "react-native";
 import ActionButton from "react-native-action-button";
-import { getDay } from "date-fns";
+import format from "date-fns/format";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { MaterialIcons, AntDesign } from "react-native-vector-icons";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -10,6 +10,7 @@ import GoalContext from "../../context/GoalContext";
 import JournalContext from "../../context/JournalContext";
 import useIsInitialRender from "../../hooks/useIsInitialRender";
 import NewItemModal from "./NewItemModal";
+import EditItemModal from "./EditItemModal";
 import Stat from "./Stat";
 import HeaderMenu from "./HeaderMenu";
 import { getCurrentCalories, getCurrentProtein } from "../../lib/helpers";
@@ -43,12 +44,13 @@ const { green, darkGrey, offWhite, headerStyle } = GlobalStyles;
 const Stack = createStackNavigator();
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+const today = format(new Date(), "EEEE");
 
-const FoodRow = ({ item, openEditModal, closeEditModal, handleOpenItemModal }) => {
+const FoodRow = ({ item, openEditModal, closeEditModal }) => {
   const { food, calories, protein } = item;
 
   return (
-    <TouchableHighlight underlayColor={"#AAA"} onPress={() => handleOpenItemModal(item)}>
+    <TouchableHighlight underlayColor={"#AAA"} onPress={openEditModal}>
       <View style={rowContainer}>
         <Text style={[width50]}>{food}</Text>
         <Text style={[rowMacro]}>{calories}</Text>
@@ -60,7 +62,8 @@ const FoodRow = ({ item, openEditModal, closeEditModal, handleOpenItemModal }) =
 
 function FoodJournal({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
-  const [day, setDay] = useState(days[getDay(new Date()) - 1]);
+  const [editModalVisible, setEditModalVisible] = useState(false);
+  const [day, setDay] = useState(days[days.indexOf(today)]);
   const [editingItem, setEditingItem] = useState();
 
   const isInitialRender = useIsInitialRender();
@@ -152,27 +155,26 @@ function FoodJournal({ navigation }) {
     );
   };
 
-  const handleOpenItemModal = (item) => {
+  const handleOpenEditItemModal = (item) => {
     setEditingItem(item);
-    setModalVisible(true);
+    setEditModalVisible(true);
   };
 
-  const updateItem = (item) => {
-    console.log(item);
+  const updateItem = (updatedItem) => {
+    const itemIndex = items[day].findIndex((item) => item.id === updatedItem.id);
+    const updatedEntries = items[day].filter((item) => item.id !== updatedItem.id);
+    updatedEntries.splice(itemIndex, 0, updatedItem);
+    setItems((prevItems) => ({
+      ...prevItems,
+      [day]: updatedEntries,
+    }));
   };
 
   const clearDay = () => {
-    console.log(`Clearing ${day}`);
-    setItems((prevItems) => {
-      console.log(day);
-      const x = {
-        ...prevItems,
-        [day]: [],
-      };
-
-      console.log(x);
-      return x;
-    });
+    setItems((prevItems) => ({
+      ...prevItems,
+      [day]: [],
+    }));
   };
 
   return (
@@ -211,9 +213,8 @@ function FoodJournal({ navigation }) {
                 <FoodRow
                   item={item}
                   key={index}
-                  openEditModal={handleOpenItemModal}
-                  closeEditModal={() => setModalVisible(false)}
-                  handleOpenItemModal={() => handleOpenItemModal(item)}
+                  openEditModal={() => handleOpenEditItemModal(item)}
+                  closeEditModal={() => setEditModalVisible(false)}
                 />
               )}
               renderHiddenItem={renderHiddenItem}
@@ -236,16 +237,23 @@ function FoodJournal({ navigation }) {
         visible={modalVisible}
         closeModal={() => setModalVisible(false)}
         addItemToList={addItemToList}
-        item={editingItem}
-        updateItem={updateItem}
       />
+      {editingItem && (
+        <EditItemModal
+          visible={editModalVisible}
+          closeModal={() => setEditModalVisible(false)}
+          // addItemToList={addItemToList}
+          item={editingItem}
+          updateItem={updateItem}
+        />
+      )}
     </>
   );
 }
 
 const JournalNavigator = ({ headerOptions, navigation }) => (
   <Stack.Navigator>
-    <Stack.Screen name="Conversions" component={FoodJournal} options={headerOptions} />
+    <Stack.Screen name="Food Journal" component={FoodJournal} options={headerOptions} />
   </Stack.Navigator>
 );
 
