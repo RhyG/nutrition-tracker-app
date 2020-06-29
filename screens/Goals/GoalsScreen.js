@@ -3,6 +3,9 @@ import { View, Text, TextInput, StyleSheet } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import GoalContext from "../../context/GoalContext";
+import globalStyles from "../../config/globalStyles";
+
+const { darkGrey, offWhite, mtop20 } = globalStyles;
 
 const Stack = createStackNavigator();
 
@@ -12,6 +15,33 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     padding: 25,
   },
+  caption: {
+    color: darkGrey,
+    fontSize: 14,
+    lineHeight: 20,
+    ...mtop20,
+  },
+  title: {
+    color: darkGrey,
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 5,
+  },
+  input: {
+    backgroundColor: offWhite,
+    padding: 10,
+    borderRadius: 6,
+  },
+  fieldsContainer: {
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-between",
+    ...mtop20,
+  },
+  fieldContainer: {
+    width: "47%",
+    justifyContent: "center",
+  },
 });
 
 function GoalsScreen() {
@@ -19,32 +49,44 @@ function GoalsScreen() {
   const [inputs, setInputs] = useState(goals || { calories: "", protein: "" });
 
   const handleChange = (name, value) => {
-    setInputs((prevInputs) => ({
-      ...prevInputs,
-      [name]: Number(value),
-    }));
-  };
+    setInputs((prevInputs) => {
+      const newGoals = {
+        ...prevInputs,
+        [name]: Number(value),
+      };
 
-  const saveGoals = () => {
-    updateGoals(inputs);
+      updateGoals(newGoals);
+
+      return newGoals;
+    });
   };
 
   return (
     <View style={styles.screenContainer}>
-      <Text>Calories</Text>
-      <TextInput
-        onChangeText={(text) => handleChange("calories", text)}
-        keyboardType="number-pad"
-        value={String(inputs.calories)}
-        onBlur={() => console.log("wow")}
-      />
-      <Text>Protein</Text>
-      <TextInput
-        onChangeText={(text) => handleChange("protein", text)}
-        keyboardType="number-pad"
-        value={String(inputs.protein)}
-      />
-      <Text onPress={saveGoals}>SAVE</Text>
+      <View style={styles.fieldsContainer}>
+        <View style={styles.fieldContainer}>
+          <Text style={styles.title}>Calories</Text>
+          <TextInput
+            onChangeText={(text) => handleChange("calories", text)}
+            keyboardType="number-pad"
+            value={String(inputs.calories)}
+            style={styles.input}
+          />
+        </View>
+        <View style={styles.fieldContainer}>
+          <Text style={[styles.title]}>Protein</Text>
+          <TextInput
+            onChangeText={(text) => handleChange("protein", text)}
+            keyboardType="number-pad"
+            value={String(inputs.protein)}
+            style={styles.input}
+          />
+        </View>
+      </View>
+      <Text style={styles.caption}>
+        Goals will automatically update and are used to track your progress in the journal and weekly
+        overview.
+      </Text>
     </View>
   );
 }

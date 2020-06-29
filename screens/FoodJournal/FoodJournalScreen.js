@@ -161,9 +161,12 @@ function FoodJournal({ navigation }) {
   };
 
   const updateItem = (updatedItem) => {
+    // Get the current index of the item
     const itemIndex = items[day].findIndex((item) => item.id === updatedItem.id);
+    // Remove the item and insert the updated item at that index
     const updatedEntries = items[day].filter((item) => item.id !== updatedItem.id);
     updatedEntries.splice(itemIndex, 0, updatedItem);
+
     setItems((prevItems) => ({
       ...prevItems,
       [day]: updatedEntries,
