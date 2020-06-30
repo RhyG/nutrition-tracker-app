@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { View, Modal, StyleSheet, Text, TextInput } from "react-native";
 import shortid from "shortid";
 
 import Button from "../../components/Button";
+import RadioButton from "../../components/RadioButton";
 import globalStyles from "../../config/globalStyles";
 const { offWhite, darkGrey, fontLightGrey } = globalStyles;
 
@@ -45,23 +46,23 @@ const styles = StyleSheet.create({
     backgroundColor: offWhite,
     width: "100%",
     borderRadius: 6,
-    // height: 20,
     paddingLeft: 10,
     paddingVertical: 10,
+  },
+  saveAnother: {
+    marginRight: "auto",
+    marginVertical: 20,
   },
   actionsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    width: "100%",
     alignItems: "center",
-    marginTop: 30,
+    marginRight: "auto",
   },
   cancel: {
     color: fontLightGrey,
     fontSize: 16,
-  },
-  saveAnother: {
-    width: "40%",
+    marginLeft: 20,
   },
 });
 
@@ -85,6 +86,9 @@ const checkAllFields = (fields) => {
 
 export default function NewItemModal({ visible, closeModal, addItemToList }) {
   const [item, setItem] = useState(defaultItem);
+  const [addAnotherSelected, setAddAnotherSelected] = useState(false);
+
+  const foodInputRef = useRef();
 
   const handleChange = (text, name) => {
     setItem((prevState) => ({
@@ -93,7 +97,7 @@ export default function NewItemModal({ visible, closeModal, addItemToList }) {
     }));
   };
 
-  const handleClose = () => {
+  const handleSave = () => {
     const newItem = { id: shortid.generate(), ...item };
 
     if (checkAllFields(item)) {
@@ -103,7 +107,10 @@ export default function NewItemModal({ visible, closeModal, addItemToList }) {
     }
 
     setItem(defaultItem);
-    closeModal();
+    setAddAnotherSelected(false);
+    foodInputRef.current.focus();
+
+    if (!addAnotherSelected) closeModal();
   };
 
   return (
@@ -117,6 +124,7 @@ export default function NewItemModal({ visible, closeModal, addItemToList }) {
             onChangeText={(text) => handleChange(text, "food")}
             value={item.food}
             style={styles.input}
+            ref={foodInputRef}
           />
           <Text style={[styles.inputLabel, { marginTop: 15 }]}>Calories</Text>
           <TextInput
@@ -132,12 +140,24 @@ export default function NewItemModal({ visible, closeModal, addItemToList }) {
             style={styles.input}
             keyboardType="number-pad"
           />
+          <View style={styles.saveAnother}>
+            <RadioButton
+              label="Add another?"
+              selected={addAnotherSelected}
+              onPress={() => setAddAnotherSelected((prev) => !prev)}
+            />
+          </View>
           <View style={styles.actionsContainer}>
-            <Text style={styles.saveAnother}>Add another</Text>
-            <Button title="Close" onPress={handleClose}>
+            <Button title="Close" onPress={handleSave}>
               Save
             </Button>
-            <Text style={styles.cancel} onPress={closeModal}>
+            <Text
+              style={styles.cancel}
+              onPress={() => {
+                setItem(defaultItem);
+                closeModal();
+              }}
+            >
               Cancel
             </Text>
           </View>
