@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { View, Modal, StyleSheet, Text, TextInput, Button } from "react-native";
+import { View, Modal, StyleSheet, Text, TextInput } from "react-native";
 import shortid from "shortid";
 
+import Button from "../../components/Button";
 import globalStyles from "../../config/globalStyles";
-const { offWhite } = globalStyles;
+import { isInputNumber } from "../../lib/helpers";
+const { offWhite, darkGrey } = globalStyles;
 
 const styles = StyleSheet.create({
   overlay: {
@@ -14,11 +16,11 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   content: {
-    minWidth: "65%",
-    maxWidth: "65%",
-    borderRadius: 4,
+    minWidth: "80%",
+    maxWidth: "80%",
+    borderRadius: 6,
     backgroundColor: "#fff",
-    padding: 20,
+    padding: 30,
     alignItems: "center",
   },
   contentWrapper: {
@@ -27,23 +29,30 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   heading: {
-    fontSize: 16,
+    fontSize: 18,
     textAlign: "left",
     width: "100%",
-    marginBottom: 10,
+    marginBottom: 20,
+    fontWeight: "bold",
+    color: darkGrey,
   },
   inputLabel: {
     textAlign: "left",
     width: "100%",
     marginBottom: 5,
+    color: darkGrey,
+    fontSize: 16,
   },
   input: {
     backgroundColor: offWhite,
     width: "100%",
-    borderRadius: 4,
-    // height: 20,
-    paddingLeft: 10,
-    paddingVertical: 10,
+    borderRadius: 6,
+    padding: 10,
+    fontSize: 18,
+  },
+  button: {
+    marginTop: 20,
+    marginRight: "auto",
   },
 });
 
@@ -71,6 +80,10 @@ export default function EditItemModal({ visible, closeModal, updateItem, item })
   useEffect(() => setEditingItem(item), [item]);
 
   const handleChange = (text, name) => {
+    if (name === "calories" || name === "protein") {
+      if (!isInputNumber(text)) return;
+    }
+
     setEditingItem((prevState) => ({
       ...prevState,
       [name]: text,
@@ -110,8 +123,8 @@ export default function EditItemModal({ visible, closeModal, updateItem, item })
             style={styles.input}
             keyboardType="number-pad"
           />
-          <Button title="Close" onPress={handleClose}>
-            CLOSE
+          <Button title="Close" onPress={handleClose} style={styles.button}>
+            Save
           </Button>
         </View>
       </View>

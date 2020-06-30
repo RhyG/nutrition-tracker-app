@@ -10,19 +10,29 @@ const styles = StyleSheet.create({
   statContainer: {
     // paddingVertical: 20,
   },
+  title: {
+    ...fontDark,
+    ...fontBold,
+    fontSize: 18,
+  },
+  remaining: {
+    color: "#887C7C",
+    fontSize: 16,
+  },
   topText: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 5,
+    alignItems: "flex-end",
   },
   progressBarOuter: {
     backgroundColor: "#DCDCDC",
-    height: 25,
+    height: 30,
     borderRadius: 8,
     position: "relative",
   },
   progressBarInner: {
-    height: 25,
+    height: 30,
     // backgroundColor: green,
     borderRadius: 8,
     zIndex: 1,
@@ -30,7 +40,7 @@ const styles = StyleSheet.create({
   textContainer: {
     position: "absolute",
     zIndex: 9,
-    height: 25,
+    height: 30,
     width: 100,
     alignItems: "center",
     justifyContent: "center",
@@ -40,15 +50,16 @@ const styles = StyleSheet.create({
   progressText: {
     color: "#fff",
     fontWeight: "bold",
+    fontSize: 16,
   },
 });
 
-export default function Stat({ name = "Calories", max = 3000, current = 1500 }) {
+export default function Stat({ name = "Calories", max = 3000, current = 1500, style }) {
   return (
-    <View style={styles.statContainer}>
+    <View style={[styles.statContainer, style]}>
       <View style={styles.topText}>
-        <Text style={[fontDark, fontBold]}>{name}</Text>
-        <Text style={{ color: "#887C7C" }}>{calcRemaining(max, current)} remaining</Text>
+        <Text style={[styles.title]}>{name}</Text>
+        <Text style={styles.remaining}>{calcRemaining(max, current)} remaining</Text>
       </View>
       <View style={styles.progressBarOuter}>
         <View style={styles.textContainer}>

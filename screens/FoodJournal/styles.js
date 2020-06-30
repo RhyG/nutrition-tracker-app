@@ -16,10 +16,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   currentDay: {
-    fontSize: 16,
+    fontSize: 20,
   },
   statsContainer: {
-    height: 160,
+    // height: 160,
     paddingTop: 20,
     paddingBottom: 30,
     justifyContent: "space-between",
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   },
   tableHeading: {
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 18,
   },
   foodHeading: {
     width: "50%",
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     textAlign: "right",
   },
   rowData: {
-    fontSize: 16,
+    fontSize: 18,
   },
   newItemModal: {
     height: 300,

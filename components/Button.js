@@ -28,14 +28,14 @@ const styles = StyleSheet.create({
   },
 });
 
-export default function CustomButton({ children, title, onPress }) {
+export default function CustomButton({ children, style, onPress }) {
   const Touchable = Platform.OS === "ios" ? TouchableOpacity : TouchableNativeFeedback;
 
   const Background =
     Platform.OS === "ios" ? null : TouchableNativeFeedback.Ripple("rgba(0, 0, 0, 0.1)", true);
 
   return (
-    <View style={styles.buttonContainer}>
+    <View style={[styles.buttonContainer, style]}>
       <Touchable background={Background} onPress={onPress}>
         <Text style={styles.buttonText}>{children}</Text>
       </Touchable>

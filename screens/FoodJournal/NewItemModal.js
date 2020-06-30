@@ -5,6 +5,7 @@ import shortid from "shortid";
 import Button from "../../components/Button";
 import RadioButton from "../../components/RadioButton";
 import globalStyles from "../../config/globalStyles";
+import { isInputNumber } from "../../lib/helpers";
 const { offWhite, darkGrey, fontLightGrey } = globalStyles;
 
 const styles = StyleSheet.create({
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   heading: {
-    fontSize: 16,
+    fontSize: 18,
     textAlign: "left",
     width: "100%",
     marginBottom: 20,
@@ -41,13 +42,14 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 5,
     color: darkGrey,
+    fontSize: 16,
   },
   input: {
     backgroundColor: offWhite,
     width: "100%",
     borderRadius: 6,
-    paddingLeft: 10,
-    paddingVertical: 10,
+    padding: 10,
+    fontSize: 18,
   },
   saveAnother: {
     marginRight: "auto",
@@ -91,6 +93,10 @@ export default function NewItemModal({ visible, closeModal, addItemToList }) {
   const foodInputRef = useRef();
 
   const handleChange = (text, name) => {
+    if (name === "calories" || name === "protein") {
+      if (!isInputNumber(text)) return;
+    }
+
     setItem((prevState) => ({
       ...prevState,
       [name]: text,

@@ -40,7 +40,7 @@ const {
 } = styles;
 
 import GlobalStyles from "../../config/globalStyles";
-const { green, darkGrey, offWhite, headerStyle } = GlobalStyles;
+const { green, darkGrey, offWhite, headerStyle, mbottom20 } = GlobalStyles;
 
 const Stack = createStackNavigator();
 
@@ -185,16 +185,16 @@ function FoodJournal({ navigation }) {
     <>
       <View style={container}>
         <View style={dayContainer}>
-          <TouchableOpacity>
-            <AntDesign name="left" size={22} color={darkGrey} onPress={() => handleDayChange("left")} />
+          <TouchableOpacity onPress={() => handleDayChange("left")}>
+            <AntDesign name="left" size={26} color={darkGrey} />
           </TouchableOpacity>
           <Text style={[currentDay]}>{day}</Text>
-          <TouchableOpacity>
-            <AntDesign name="right" size={22} color={darkGrey} onPress={() => handleDayChange("right")} />
+          <TouchableOpacity onPress={() => handleDayChange("right")}>
+            <AntDesign name="right" size={26} color={darkGrey} />
           </TouchableOpacity>
         </View>
         <View style={statsContainer}>
-          <Stat name="Calories" max={calories} current={getCurrentCalories(items[day])} />
+          <Stat name="Calories" max={calories} current={getCurrentCalories(items[day])} style={[mbottom20]} />
           <Stat name="Protein" max={protein} current={getCurrentProtein(items[day])} />
         </View>
       </View>

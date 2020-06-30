@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import GoalContext from "../../context/GoalContext";
 import globalStyles from "../../config/globalStyles";
+import { isInputNumber } from "../../lib/helpers";
 
 const { darkGrey, offWhite, mtop20 } = globalStyles;
 
@@ -31,6 +32,7 @@ const styles = StyleSheet.create({
     backgroundColor: offWhite,
     padding: 10,
     borderRadius: 6,
+    fontSize: 18,
   },
   fieldsContainer: {
     flexDirection: "row",
@@ -39,7 +41,7 @@ const styles = StyleSheet.create({
     ...mtop20,
   },
   fieldContainer: {
-    width: "47%",
+    width: "48%",
     justifyContent: "center",
   },
 });
@@ -49,6 +51,8 @@ function GoalsScreen() {
   const [inputs, setInputs] = useState(goals || { calories: "", protein: "" });
 
   const handleChange = (name, value) => {
+    if (!isInputNumber(value)) return;
+
     setInputs((prevInputs) => {
       const newGoals = {
         ...prevInputs,

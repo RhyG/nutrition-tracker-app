@@ -3,7 +3,7 @@ import { View, Text, TextInput, StyleSheet } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import globalStyles from "../config/globalStyles";
-import { calToKj, kjToCal } from "../lib/helpers";
+import { calToKj, kjToCal, isInputNumber } from "../lib/helpers";
 
 const { offWhite, darkGrey } = globalStyles;
 
@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   fieldContainer: {
-    width: "47%",
+    width: "48%",
   },
   title: {
     color: darkGrey,
@@ -48,14 +48,16 @@ function Conversions() {
   const [kj, setKj] = useState("4.184");
   const [calories, setCalories] = useState("1");
 
-  const handleCalorieChange = (x) => {
-    setKj(calToKj(Number(x)));
-    setCalories(x);
+  const handleCalorieChange = (value) => {
+    if (!isInputNumber(value)) return;
+    setKj(calToKj(Number(value)));
+    setCalories(value);
   };
 
-  const handleKilojouleChange = (x) => {
-    setCalories(kjToCal(Number(x)));
-    setKj(x);
+  const handleKilojouleChange = (value) => {
+    if (!isInputNumber(value)) return;
+    setCalories(kjToCal(Number(value)));
+    setKj(value);
   };
 
   return (
