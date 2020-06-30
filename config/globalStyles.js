@@ -7,6 +7,7 @@ const colours = {
   lightGrey: "#efefef",
   darkBlue: "#2D3E4E",
   red: "#dc3545",
+  fontLightGrey: "#7c7c7c",
 };
 
 const GlobalStyles = StyleSheet.create({

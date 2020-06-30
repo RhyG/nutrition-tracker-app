@@ -101,12 +101,14 @@ export default function EditItemModal({ visible, closeModal, updateItem, item })
             onChangeText={(text) => handleChange(text, "calories")}
             value={String(editingItem.calories)}
             style={[styles.input, { marginBottom: 10 }]}
+            keyboardType="number-pad"
           />
           <Text style={styles.inputLabel}>Protein</Text>
           <TextInput
             onChangeText={(text) => handleChange(text, "protein")}
             value={String(editingItem.protein)}
             style={styles.input}
+            keyboardType="number-pad"
           />
           <Button title="Close" onPress={handleClose}>
             CLOSE

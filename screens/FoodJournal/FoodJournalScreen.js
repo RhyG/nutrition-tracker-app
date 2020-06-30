@@ -32,6 +32,7 @@ const {
   newItemModal,
   macroHeading,
   rowMacro,
+  rowData,
   dividerOuter,
   dividerInner,
   eatSomethingContainer,
@@ -52,9 +53,9 @@ const FoodRow = ({ item, openEditModal, closeEditModal }) => {
   return (
     <TouchableHighlight underlayColor={"#AAA"} onPress={openEditModal}>
       <View style={rowContainer}>
-        <Text style={[width50]}>{food}</Text>
-        <Text style={[rowMacro]}>{calories}</Text>
-        <Text style={[rowMacro]}>{protein}</Text>
+        <Text style={[rowData, width50]}>{food}</Text>
+        <Text style={[rowData, rowMacro]}>{calories}</Text>
+        <Text style={[rowData, rowMacro]}>{protein}</Text>
       </View>
     </TouchableHighlight>
   );

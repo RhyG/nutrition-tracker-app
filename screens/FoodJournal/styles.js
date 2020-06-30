@@ -69,6 +69,9 @@ const styles = StyleSheet.create({
     width: 60,
     textAlign: "right",
   },
+  rowData: {
+    fontSize: 16,
+  },
   newItemModal: {
     height: 300,
     width: 300,

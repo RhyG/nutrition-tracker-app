@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { View, Modal, StyleSheet, Text, TextInput, Button } from "react-native";
+import { View, Modal, StyleSheet, Text, TextInput } from "react-native";
 import shortid from "shortid";
 
+import Button from "../../components/Button";
 import globalStyles from "../../config/globalStyles";
-const { offWhite } = globalStyles;
+const { offWhite, darkGrey, fontLightGrey } = globalStyles;
 
 const styles = StyleSheet.create({
   overlay: {
@@ -14,11 +15,11 @@ const styles = StyleSheet.create({
     position: "absolute",
   },
   content: {
-    minWidth: "65%",
-    maxWidth: "65%",
-    borderRadius: 4,
+    minWidth: "80%",
+    maxWidth: "80%",
+    borderRadius: 6,
     backgroundColor: "#fff",
-    padding: 20,
+    padding: 30,
     alignItems: "center",
   },
   contentWrapper: {
@@ -30,20 +31,37 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textAlign: "left",
     width: "100%",
-    marginBottom: 10,
+    marginBottom: 20,
+    fontWeight: "bold",
+    color: darkGrey,
   },
   inputLabel: {
     textAlign: "left",
     width: "100%",
     marginBottom: 5,
+    color: darkGrey,
   },
   input: {
     backgroundColor: offWhite,
     width: "100%",
-    borderRadius: 4,
+    borderRadius: 6,
     // height: 20,
     paddingLeft: 10,
     paddingVertical: 10,
+  },
+  actionsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    alignItems: "center",
+    marginTop: 30,
+  },
+  cancel: {
+    color: fontLightGrey,
+    fontSize: 16,
+  },
+  saveAnother: {
+    width: "40%",
   },
 });
 
@@ -78,7 +96,12 @@ export default function NewItemModal({ visible, closeModal, addItemToList }) {
   const handleClose = () => {
     const newItem = { id: shortid.generate(), ...item };
 
-    if (checkAllFields(item)) addItemToList(newItem);
+    if (checkAllFields(item)) {
+      addItemToList(newItem);
+    } else {
+      return;
+    }
+
     setItem(defaultItem);
     closeModal();
   };
@@ -95,21 +118,29 @@ export default function NewItemModal({ visible, closeModal, addItemToList }) {
             value={item.food}
             style={styles.input}
           />
-          <Text style={[styles.inputLabel, { marginTop: 10 }]}>Calories</Text>
+          <Text style={[styles.inputLabel, { marginTop: 15 }]}>Calories</Text>
           <TextInput
             onChangeText={(text) => handleChange(text, "calories")}
             value={item.calories}
-            style={[styles.input, { marginBottom: 10 }]}
+            style={[styles.input, { marginBottom: 15 }]}
+            keyboardType="number-pad"
           />
           <Text style={styles.inputLabel}>Protein</Text>
           <TextInput
             onChangeText={(text) => handleChange(text, "protein")}
             value={item.protein}
             style={styles.input}
+            keyboardType="number-pad"
           />
-          <Button title="Close" onPress={handleClose}>
-            CLOSE
-          </Button>
+          <View style={styles.actionsContainer}>
+            <Text style={styles.saveAnother}>Add another</Text>
+            <Button title="Close" onPress={handleClose}>
+              Save
+            </Button>
+            <Text style={styles.cancel} onPress={closeModal}>
+              Cancel
+            </Text>
+          </View>
         </View>
       </View>
     </Modal>

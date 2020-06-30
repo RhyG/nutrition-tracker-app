@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
 });
 
 function Conversions() {
-  const [kj, setKj] = useState("1");
-  const [calories, setCalories] = useState("4.184");
+  const [kj, setKj] = useState("4.184");
+  const [calories, setCalories] = useState("1");
 
   const handleCalorieChange = (x) => {
     setKj(calToKj(Number(x)));
@@ -70,6 +70,7 @@ function Conversions() {
               placeholder="Calories"
               onChangeText={handleCalorieChange}
               value={String(calories)}
+              keyboardType="number-pad"
             />
           </View>
           <View style={styles.fieldContainer}>
@@ -79,6 +80,7 @@ function Conversions() {
               placeholder="Kilojoules (kj)"
               onChangeText={handleKilojouleChange}
               value={String(kj)}
+              keyboardType="number-pad"
             />
           </View>
         </View>
