@@ -1,9 +1,7 @@
 import React from "react";
-import { createStackNavigator } from "@react-navigation/stack";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import styles from "../config/globalStyles";
-import Sidebar from "../components/SideMenu";
 import BurgerMenu from "../components/BurgerMenu";
 
 import FoodJournal from "../screens/FoodJournal/FoodJournalScreen";
@@ -40,8 +38,9 @@ const AppNavigator = ({ navigation }) => {
         overlayColor="transparent"
         drawerContentOptions={{
           activeBackgroundColor: "#2C3949",
-          itemStyle: { width: "100%", marginLeft: 0, paddingLeft: 20 },
-          labelStyle: { color: "#fff", fontWeight: "bold" },
+          itemStyle: { width: "100%", marginLeft: 0 },
+          labelStyle: { color: "#fff", fontWeight: "bold", width: "100%", paddingLeft: 20 },
+          style: { width: "100%" },
           contentContainerStyle: { paddingTop: 120 },
         }}
       >
@@ -50,7 +49,6 @@ const AppNavigator = ({ navigation }) => {
         <Drawer.Screen name="Goals" component={GoalsNavigator} />
         <Drawer.Screen name="Conversions" component={ConversionsNavigator} />
       </Drawer.Navigator>
-      <Sidebar />
     </>
   );
 };

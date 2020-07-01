@@ -51,8 +51,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   button: {
+    marginRight: 20,
+  },
+  actionsContainer: {
     marginTop: 20,
+    flexDirection: "row",
     marginRight: "auto",
+    alignItems: "center",
   },
 });
 
@@ -123,9 +128,12 @@ export default function EditItemModal({ visible, closeModal, updateItem, item })
             style={styles.input}
             keyboardType="number-pad"
           />
-          <Button title="Close" onPress={handleClose} style={styles.button}>
-            Save
-          </Button>
+          <View style={styles.actionsContainer}>
+            <Button title="Close" onPress={handleClose} style={styles.button}>
+              Save
+            </Button>
+            <Text>Cancel</Text>
+          </View>
         </View>
       </View>
     </Modal>
