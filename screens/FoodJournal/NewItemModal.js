@@ -61,11 +61,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginRight: "auto",
   },
-  cancel: {
-    color: fontLightGrey,
-    fontSize: 16,
-    marginLeft: 20,
-  },
 });
 
 const defaultItem = {
@@ -154,18 +149,20 @@ export default function NewItemModal({ visible, closeModal, addItemToList }) {
             />
           </View>
           <View style={styles.actionsContainer}>
-            <Button title="Close" onPress={handleSave}>
+            <Button title="Close" onPress={handleSave} buttonStyle="green">
               Save
             </Button>
-            <Text
-              style={styles.cancel}
+            <Button
+              title="Close"
               onPress={() => {
                 setItem(defaultItem);
                 closeModal();
               }}
+              buttonStyle="transparent"
+              labelStyle={{ fontWeight: "normal" }}
             >
               Cancel
-            </Text>
+            </Button>
           </View>
         </View>
       </View>

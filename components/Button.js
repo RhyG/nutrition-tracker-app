@@ -11,33 +11,49 @@ import {
 
 import globalStyles from "../config/globalStyles";
 
-const { green } = globalStyles;
+const { green, fontLightGrey } = globalStyles;
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    backgroundColor: green,
     borderRadius: 6,
     paddingVertical: 10,
     paddingHorizontal: 24,
   },
   buttonText: {
-    color: "#fff",
     fontWeight: "bold",
-    // letterSpacing: 1,
     fontSize: 16,
+  },
+  touchable: {
+    width: "100%",
   },
 });
 
-export default function CustomButton({ children, style, onPress }) {
+const buttonStyles = {
+  green: {
+    container: {
+      backgroundColor: green,
+    },
+    label: {
+      color: "#fff",
+    },
+  },
+  transparent: {
+    label: {
+      color: fontLightGrey,
+    },
+  },
+};
+
+export default function CustomButton({ children, style, onPress, buttonStyle, labelStyle }) {
   const Touchable = Platform.OS === "ios" ? TouchableOpacity : TouchableNativeFeedback;
 
   const Background =
     Platform.OS === "ios" ? null : TouchableNativeFeedback.Ripple("rgba(0, 0, 0, 0.1)", true);
 
   return (
-    <View style={[styles.buttonContainer, style]}>
-      <Touchable background={Background} onPress={onPress}>
-        <Text style={styles.buttonText}>{children}</Text>
+    <View style={[styles.buttonContainer, style, buttonStyles[buttonStyle].container]}>
+      <Touchable background={Background} onPress={onPress} style={styles.touchable}>
+        <Text style={[buttonStyles[buttonStyle].label, styles.buttonText, labelStyle]}>{children}</Text>
       </Touchable>
     </View>
   );

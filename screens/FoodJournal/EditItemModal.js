@@ -129,10 +129,12 @@ export default function EditItemModal({ visible, closeModal, updateItem, item })
             keyboardType="number-pad"
           />
           <View style={styles.actionsContainer}>
-            <Button title="Close" onPress={handleClose} style={styles.button}>
+            <Button title="Close" onPress={handleClose} containerStyle={styles.button} buttonStyle="green">
               Save
             </Button>
-            <Text>Cancel</Text>
+            <Button title="Close" onPress={() => closeModal()} buttonStyle="transparent">
+              Cancel
+            </Button>
           </View>
         </View>
       </View>

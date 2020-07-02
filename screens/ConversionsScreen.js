@@ -1,16 +1,51 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
+import DropDownPicker from "react-native-dropdown-picker";
 
 import globalStyles from "../config/globalStyles";
 import { calToKj, kjToCal, isInputNumber } from "../lib/helpers";
 
-const { offWhite, darkGrey } = globalStyles;
+const { offWhite, darkGrey, mtop10, mtop20 } = globalStyles;
 
 const Stack = createStackNavigator();
 
+// give callback to fiat team they accept no matter what and credit that amount to user. If it does break do we generate POLi URL based on $5
+
+const activityLevels = [
+  {
+    label: "Sedentary (little to no exercise + work a desk job)",
+    value: "Sedentary (little to no exercise + work a desk job)",
+    multiplier: 1.2,
+  },
+  {
+    label: "Lightly active (light exercise 1-3 days / week)",
+    value: "Lightly active (light exercise 1-3 days / week)",
+    multiplier: 1.375,
+  },
+  {
+    label: "Moderately active (moderate exercise 3-5 days / week)",
+    value: "Moderately active (moderate exercise 3-5 days / week)",
+    multiplier: 1.55,
+  },
+  {
+    label: "Very active (heavy exercise 6-7 days / week)",
+    value: "Very active (heavy exercise 6-7 days / week)",
+    multiplier: 1.725,
+  },
+  {
+    label: "Extremely active (very heavy exercise, hard labor job, training 2x / day)",
+    value: "Extremely active (very heavy exercise, hard labor job, training 2x / day)",
+    multiplier: 1.9,
+  },
+];
+
 const styles = StyleSheet.create({
-  container: { backgroundColor: "white", flex: 1, padding: 20 },
+  container: {
+    backgroundColor: "white",
+    flex: 1,
+    paddingHorizontal: 20,
+  },
   fieldsContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -42,11 +77,21 @@ const styles = StyleSheet.create({
     marginTop: 20,
     fontSize: 16,
   },
+  tdeeFields: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+  },
+  convertEnergyContainer: {
+    zIndex: -5,
+  },
 });
 
 function Conversions() {
-  const [kj, setKj] = useState("4.184");
-  const [calories, setCalories] = useState("1");
+  const [kj, setKj] = useState("");
+  const [calories, setCalories] = useState("");
+
+  const [activityLevel, setActivityLevel] = useState(activityLevels[0]);
 
   const handleCalorieChange = (value) => {
     if (!isInputNumber(value)) return;
@@ -62,6 +107,52 @@ function Conversions() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.tdeeContainer}>
+        <Text style={styles.title}>Calculate TDEE</Text>
+        <View style={styles.tdeeFields}>
+          <View style={styles.fieldContainer}>
+            <Text style={styles.fieldLabel}>Age</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Age"
+              // onChangeText={handleKilojouleChange}
+              // value={String(kj)}
+            />
+          </View>
+          <View style={styles.fieldContainer}>
+            <Text style={styles.fieldLabel}>Weight</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Weight"
+              // onChangeText={handleKilojouleChange}
+              // value={String(kj)}
+            />
+          </View>
+          <View style={styles.fieldContainer}>
+            <Text style={[styles.fieldLabel, mtop20]}>Height</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Height"
+              // onChangeText={handleKilojouleChange}
+              // value={String(kj)}
+            />
+          </View>
+        </View>
+        <Text style={[styles.fieldLabel, mtop20]}>Activity level</Text>
+        <DropDownPicker
+          items={activityLevels}
+          defaultValue={activityLevel.value}
+          containerStyle={{ height: 40 }}
+          style={{ backgroundColor: "#fafafa" }}
+          dropDownStyle={{ backgroundColor: "#fafafa" }}
+          onChangeItem={(item) => setActivityLevel(item)}
+          zIndex={5000}
+        />
+        <Text>
+          Mifflin St. Jeor equation Men: 10 x weight (kg) + 6.25 x height (cm) - 5 x age (y) + 5 Women: 10 x
+          weight (kg) + 6.25 x height (cm) - 5 x age (y) - 161{"\n"}
+        </Text>
+      </View>
       <View style={styles.convertEnergyContainer}>
         <Text style={styles.title}>Convert Kilojoules to Calories</Text>
         <View style={styles.fieldsContainer}>

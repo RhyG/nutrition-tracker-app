@@ -33,6 +33,7 @@ const {
   macroHeading,
   rowMacro,
   rowData,
+  rowBack,
   dividerOuter,
   dividerInner,
   eatSomethingContainer,
@@ -148,7 +149,7 @@ function FoodJournal({ navigation }) {
 
   const renderHiddenItem = ({ item }) => {
     return (
-      <TouchableHighlight style={styles.rowBack} onPress={() => removeItemFromList(item.id)}>
+      <TouchableHighlight style={rowBack} onPress={() => removeItemFromList(item.id)}>
         <View style={[styles.backRightBtn, styles.backRightBtnRight]}>
           <MaterialIcons name="delete" size={22} color="#fff" />
         </View>

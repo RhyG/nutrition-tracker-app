@@ -29,14 +29,16 @@ const styles = StyleSheet.create({
     flex: 1,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-    paddingVertical: 30,
-    paddingBottom: 50,
+    paddingTop: 20,
+    paddingBottom: 80,
   },
   tableHeadings: {
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 30,
-    marginBottom: 20,
+    paddingBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: lightGrey,
   },
   tableHeading: {
     fontWeight: "bold",
@@ -51,10 +53,12 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 10,
+    paddingVertical: 20,
     backgroundColor: "white",
     flex: 1,
     paddingHorizontal: 30,
+    borderBottomWidth: 1,
+    borderBottomColor: lightGrey,
   },
   dividerOuter: {
     width: "100%",
@@ -95,7 +99,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingLeft: 15,
+    paddingLeft: 50,
   },
   backRightBtn: {
     alignItems: "center",
