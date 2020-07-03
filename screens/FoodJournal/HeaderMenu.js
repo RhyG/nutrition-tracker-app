@@ -15,19 +15,22 @@ const styles = StyleSheet.create({
   },
 });
 
-const HeaderMenu = ({ navigation, onPress, clearDay, clearJournal }) => (
+const HeaderMenu = ({ navigation, copyPreviousDay, clearDay, clearJournal }) => (
   <TouchableOpacity style={styles.headerMenu}>
     <Menu>
       <MenuTrigger children={<Entypo name="dots-three-vertical" size={22} color={globalStyles.darkGrey} />} />
       <MenuOptions customStyles={{ optionsContainer: styles.optionsContainer }}>
-        <MenuOption onSelect={() => navigation.navigate("Goals")}>
-          <Text>Set goals</Text>
+        <MenuOption onSelect={copyPreviousDay}>
+          <Text>Copy previous day</Text>
         </MenuOption>
         <MenuOption onSelect={clearDay}>
           <Text>Clear day</Text>
         </MenuOption>
         <MenuOption onSelect={clearJournal}>
           <Text>Clear week</Text>
+        </MenuOption>
+        <MenuOption onSelect={() => navigation.navigate("Goals")}>
+          <Text>Set goals</Text>
         </MenuOption>
       </MenuOptions>
     </Menu>

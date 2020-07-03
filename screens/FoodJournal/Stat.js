@@ -27,12 +27,12 @@ const styles = StyleSheet.create({
   },
   progressBarOuter: {
     backgroundColor: "#DCDCDC",
-    height: 30,
+    height: 25,
     borderRadius: 8,
     position: "relative",
   },
   progressBarInner: {
-    height: 30,
+    height: 25,
     // backgroundColor: green,
     borderRadius: 8,
     zIndex: 1,
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   textContainer: {
     position: "absolute",
     zIndex: 9,
-    height: 30,
+    height: 25,
     width: 100,
     alignItems: "center",
     justifyContent: "center",

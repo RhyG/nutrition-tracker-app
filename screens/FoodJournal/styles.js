@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native";
 
 import GlobalStyles from "../../config/globalStyles";
-const { phorizontal20, offWhite, lightGrey, red } = GlobalStyles;
+const { phorizontal20, offWhite, lightGrey, red, darkGrey } = GlobalStyles;
 
 const styles = StyleSheet.create({
   container: {
@@ -36,13 +36,14 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 30,
-    paddingBottom: 20,
+    paddingBottom: 10,
     borderBottomWidth: 1,
     borderBottomColor: lightGrey,
   },
   tableHeading: {
     fontWeight: "bold",
     fontSize: 18,
+    color: darkGrey,
   },
   foodHeading: {
     width: "50%",
@@ -53,7 +54,7 @@ const styles = StyleSheet.create({
   rowContainer: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 20,
+    paddingVertical: 10,
     backgroundColor: "white",
     flex: 1,
     paddingHorizontal: 30,
@@ -121,7 +122,11 @@ const styles = StyleSheet.create({
     height: "100%",
     alignItems: "center",
   },
-  eatSomething: {},
+  eatSomething: {
+    color: darkGrey,
+    fontWeight: "bold",
+    fontSize: 22,
+  },
 });
 
 export const width50 = {

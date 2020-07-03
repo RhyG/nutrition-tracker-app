@@ -85,13 +85,18 @@ const styles = StyleSheet.create({
   convertEnergyContainer: {
     zIndex: -5,
   },
+  pickerLabel: {
+    color: darkGrey,
+    fontSize: 16,
+  },
 });
 
 function Conversions() {
+  const [activityLevel, setActivityLevel] = useState(activityLevels[0]);
+  const [data, setData] = useState({ age: "", weight: "", height: "", gender: "M", activityMultiplier: 0 });
+
   const [kj, setKj] = useState("");
   const [calories, setCalories] = useState("");
-
-  const [activityLevel, setActivityLevel] = useState(activityLevels[0]);
 
   const handleCalorieChange = (value) => {
     if (!isInputNumber(value)) return;
@@ -105,6 +110,13 @@ function Conversions() {
     setKj(value);
   };
 
+  const handleCalculatorChange = (property, value) => {
+    setData((prevData) => ({
+      ...prevData,
+      [property]: value,
+    }));
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.tdeeContainer}>
@@ -115,8 +127,8 @@ function Conversions() {
             <TextInput
               style={styles.input}
               placeholder="Age"
-              // onChangeText={handleKilojouleChange}
-              // value={String(kj)}
+              onChangeText={(text) => handleCalculatorChange("age", text)}
+              value={String(data.age)}
             />
           </View>
           <View style={styles.fieldContainer}>
@@ -124,8 +136,8 @@ function Conversions() {
             <TextInput
               style={styles.input}
               placeholder="Weight"
-              // onChangeText={handleKilojouleChange}
-              // value={String(kj)}
+              onChangeText={(text) => handleCalculatorChange("weight", text)}
+              value={String(data.weight)}
             />
           </View>
           <View style={styles.fieldContainer}>
@@ -133,8 +145,8 @@ function Conversions() {
             <TextInput
               style={styles.input}
               placeholder="Height"
-              // onChangeText={handleKilojouleChange}
-              // value={String(kj)}
+              onChangeText={(text) => handleCalculatorChange("height", text)}
+              value={String(data.height)}
             />
           </View>
         </View>
@@ -145,13 +157,12 @@ function Conversions() {
           containerStyle={{ height: 40 }}
           style={{ backgroundColor: "#fafafa" }}
           dropDownStyle={{ backgroundColor: "#fafafa" }}
-          onChangeItem={(item) => setActivityLevel(item)}
-          zIndex={5000}
+          onChangeItem={(item) => {
+            setActivityLevel(item);
+            handleCalculatorChange("activityMultiplier", item.multiplier);
+          }}
+          labelStyle={styles.pickerLabel}
         />
-        <Text>
-          Mifflin St. Jeor equation Men: 10 x weight (kg) + 6.25 x height (cm) - 5 x age (y) + 5 Women: 10 x
-          weight (kg) + 6.25 x height (cm) - 5 x age (y) - 161{"\n"}
-        </Text>
       </View>
       <View style={styles.convertEnergyContainer}>
         <Text style={styles.title}>Convert Kilojoules to Calories</Text>

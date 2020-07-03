@@ -39,7 +39,7 @@ const AppNavigator = ({ navigation }) => {
         drawerContentOptions={{
           activeBackgroundColor: "#2C3949",
           itemStyle: { width: "100%", marginLeft: 0 },
-          labelStyle: { color: "#fff", fontWeight: "bold", width: "100%", paddingLeft: 20 },
+          labelStyle: { color: "#fff", fontWeight: "bold", fontSize: 16, width: "100%", paddingLeft: 20 },
           style: { width: "100%" },
           contentContainerStyle: { paddingTop: 120 },
         }}

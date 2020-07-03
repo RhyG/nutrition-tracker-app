@@ -41,7 +41,7 @@ const {
 } = styles;
 
 import GlobalStyles from "../../config/globalStyles";
-const { green, darkGrey, offWhite, headerStyle, mbottom20 } = GlobalStyles;
+const { green, darkGrey, offWhite, headerStyle, mbottom10 } = GlobalStyles;
 
 const Stack = createStackNavigator();
 
@@ -90,6 +90,7 @@ function FoodJournal({ navigation }) {
           navigation={navigation}
           clearDay={clearDay}
           clearJournal={clearJournal}
+          copyPreviousDay={copyPreviousDay}
         />
       ),
     });
@@ -182,6 +183,18 @@ function FoodJournal({ navigation }) {
     }));
   };
 
+  const copyPreviousDay = () => {
+    setItems((prevItems) => {
+      const yesterday = days[days.indexOf(day) - 1];
+      const newItems = [...prevItems[yesterday]];
+
+      return {
+        ...prevItems,
+        [day]: newItems,
+      };
+    });
+  };
+
   return (
     <>
       <View style={container}>
@@ -189,13 +202,13 @@ function FoodJournal({ navigation }) {
           <TouchableOpacity onPress={() => handleDayChange("left")}>
             <AntDesign name="left" size={26} color={darkGrey} />
           </TouchableOpacity>
-          <Text style={[currentDay]}>{day}</Text>
+          <Text style={[currentDay]}>{day === today ? "Today" : day}</Text>
           <TouchableOpacity onPress={() => handleDayChange("right")}>
             <AntDesign name="right" size={26} color={darkGrey} />
           </TouchableOpacity>
         </View>
         <View style={statsContainer}>
-          <Stat name="Calories" max={calories} current={getCurrentCalories(items[day])} style={[mbottom20]} />
+          <Stat name="Calories" max={calories} current={getCurrentCalories(items[day])} style={[mbottom10]} />
           <Stat name="Protein" max={protein} current={getCurrentProtein(items[day])} />
         </View>
       </View>
