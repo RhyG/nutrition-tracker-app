@@ -223,9 +223,11 @@ function FoodJournal({ navigation }) {
             </View>
             <SwipeListView
               useFlatList={true}
+              scrollEnabled={true}
               disableRightSwipe={true}
               closeOnRowOpen={true}
               closeOnRowBeginSwipe={true}
+              keyExtractor={(item, index) => item.id}
               data={items[day] || []}
               renderItem={({ item, index }) => (
                 <FoodRow

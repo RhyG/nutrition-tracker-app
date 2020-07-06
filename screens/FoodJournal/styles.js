@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
   container: {
     ...phorizontal20,
     backgroundColor: offWhite,
-    paddingTop: 20,
+    paddingTop: 10,
   },
   dayContainer: {
     width: "100%",
@@ -20,8 +20,8 @@ const styles = StyleSheet.create({
   },
   statsContainer: {
     // height: 160,
-    paddingTop: 20,
-    paddingBottom: 30,
+    paddingTop: 15,
+    paddingBottom: 25,
     justifyContent: "space-between",
   },
   mealRowsContainer: {
@@ -29,8 +29,8 @@ const styles = StyleSheet.create({
     flex: 1,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-    paddingTop: 20,
-    paddingBottom: 80,
+    paddingTop: 12,
+    paddingBottom: 20,
   },
   tableHeadings: {
     flexDirection: "row",
