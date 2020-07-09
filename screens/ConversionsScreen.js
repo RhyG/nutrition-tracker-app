@@ -5,6 +5,8 @@ import DropDownPicker from "react-native-dropdown-picker";
 
 import globalStyles from "../config/globalStyles";
 import { calToKj, kjToCal, isInputNumber } from "../lib/helpers";
+import RadioButton from "../components/RadioButton";
+import Button from "../components/Button";
 
 const { offWhite, darkGrey, mtop10, mtop20 } = globalStyles;
 
@@ -89,11 +91,28 @@ const styles = StyleSheet.create({
     color: darkGrey,
     fontSize: 16,
   },
+  radiosContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flex: 1,
+  },
+  resultContainer: {
+    height: 22,
+    ...mtop20,
+  },
+  result: {
+    color: darkGrey,
+    fontSize: 18,
+  },
 });
+
+const defaultData = { age: "", weight: "", height: "", gender: "M", activityMultiplier: 0 };
 
 function Conversions() {
   const [activityLevel, setActivityLevel] = useState(activityLevels[0]);
-  const [data, setData] = useState({ age: "", weight: "", height: "", gender: "M", activityMultiplier: 0 });
+  const [data, setData] = useState(defaultData);
+  const [TDEE, setTDEE] = useState();
 
   const [kj, setKj] = useState("");
   const [calories, setCalories] = useState("");
@@ -111,10 +130,28 @@ function Conversions() {
   };
 
   const handleCalculatorChange = (property, value) => {
+    if (["age", "height", "weight"].includes(property)) {
+      if (!isInputNumber(value)) return;
+    }
+
     setData((prevData) => ({
       ...prevData,
       [property]: value,
     }));
+  };
+
+  const calculateTDEE = () => {
+    const { age, weight, height, gender, activityMultiplier } = data;
+
+    if (!age || !weight || !height || !activityMultiplier) {
+      return;
+    }
+
+    const genderVariable = gender === "M" ? 5 : -161;
+
+    const BMR = 10 * Number(weight) + 6.25 * Number(height) - 5 * Number(age) + genderVariable;
+    const TDEE = BMR * Number(activityMultiplier);
+    setTDEE(Math.round(TDEE));
   };
 
   return (
@@ -126,28 +163,43 @@ function Conversions() {
             <Text style={styles.fieldLabel}>Age</Text>
             <TextInput
               style={styles.input}
-              placeholder="Age"
+              placeholder="26"
               onChangeText={(text) => handleCalculatorChange("age", text)}
               value={String(data.age)}
             />
           </View>
           <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Weight</Text>
+            <Text style={styles.fieldLabel}>Weight (kg)</Text>
             <TextInput
               style={styles.input}
-              placeholder="Weight"
+              placeholder="74kg"
               onChangeText={(text) => handleCalculatorChange("weight", text)}
               value={String(data.weight)}
             />
           </View>
           <View style={styles.fieldContainer}>
-            <Text style={[styles.fieldLabel, mtop20]}>Height</Text>
+            <Text style={[styles.fieldLabel, mtop20]}>Height (cm)</Text>
             <TextInput
               style={styles.input}
-              placeholder="Height"
+              placeholder="178cm"
               onChangeText={(text) => handleCalculatorChange("height", text)}
               value={String(data.height)}
             />
+          </View>
+          <View style={[styles.fieldContainer, mtop20]}>
+            <Text style={styles.fieldLabel}>Gender</Text>
+            <View style={styles.radiosContainer}>
+              <RadioButton
+                label="Male"
+                selected={data.gender === "M"}
+                onPress={() => handleCalculatorChange("gender", "M")}
+              />
+              <RadioButton
+                label="Female"
+                selected={data.gender === "F"}
+                onPress={() => handleCalculatorChange("gender", "F")}
+              />
+            </View>
           </View>
         </View>
         <Text style={[styles.fieldLabel, mtop20]}>Activity level</Text>
@@ -163,6 +215,12 @@ function Conversions() {
           }}
           labelStyle={styles.pickerLabel}
         />
+        <Button title="Calculate TDEE" onPress={calculateTDEE} buttonStyle="green" style={[mtop20]}>
+          Calculate TDEE
+        </Button>
+        <View style={[styles.resultContainer]}>
+          {TDEE && <Text style={[styles.result]}>Your TDEE is {TDEE} calories</Text>}
+        </View>
       </View>
       <View style={styles.convertEnergyContainer}>
         <Text style={styles.title}>Convert Kilojoules to Calories</Text>
@@ -196,7 +254,7 @@ function Conversions() {
 
 const ConversionsNavigator = ({ headerOptions, navigation }) => (
   <Stack.Navigator>
-    <Stack.Screen name="Conversions" component={Conversions} options={headerOptions} />
+    <Stack.Screen name="Calculators" component={Conversions} options={headerOptions} />
   </Stack.Navigator>
 );
 

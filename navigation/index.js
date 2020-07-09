@@ -47,7 +47,7 @@ const AppNavigator = ({ navigation }) => {
         <Drawer.Screen name="Food Journal" component={JournalNavigator} />
         <Drawer.Screen name="Weekly Overview" component={WeeklyOverviewNavigator} />
         <Drawer.Screen name="Goals" component={GoalsNavigator} />
-        <Drawer.Screen name="Conversions" component={ConversionsNavigator} />
+        <Drawer.Screen name="Calculators" component={ConversionsNavigator} />
       </Drawer.Navigator>
     </>
   );

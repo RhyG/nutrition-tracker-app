@@ -24,7 +24,6 @@ const styles = StyleSheet.create({
 });
 
 export default function RadioButton({ selected, label, containerStyle, onPress }) {
-  console.log(selected);
   return (
     <TouchableWithoutFeedback onPress={onPress}>
       <View style={[styles.container, containerStyle]}>
