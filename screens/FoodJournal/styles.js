@@ -1,4 +1,4 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet, Platform } from "react-native";
 
 import GlobalStyles from "../../config/globalStyles";
 const { phorizontal20, offWhite, lightGrey, red, darkGrey } = GlobalStyles;
@@ -126,6 +126,11 @@ const styles = StyleSheet.create({
     color: darkGrey,
     fontWeight: "bold",
     fontSize: 22,
+  },
+  addItemButtonContainer: {
+    paddingHorizontal: 30,
+    paddingBottom: Platform.OS === "android" ? 20 : 0,
+    backgroundColor: "#fff",
   },
 });
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect, useContext, useCallback, useRef } from "react";
-import { View, Text, TouchableOpacity, TouchableHighlight } from "react-native";
+import { View, Text, TouchableOpacity, TouchableHighlight, SafeAreaView } from "react-native";
 import ActionButton from "react-native-action-button";
 import format from "date-fns/format";
 import { SwipeListView } from "react-native-swipe-list-view";
@@ -14,6 +14,7 @@ import EditItemModal from "./EditItemModal";
 import Stat from "./Stat";
 import HeaderMenu from "./HeaderMenu";
 import { getCurrentCalories, getCurrentProtein } from "../../lib/helpers";
+import Button from "../../components/Button";
 
 import dummyData from "../../dummyData";
 
@@ -38,6 +39,7 @@ const {
   dividerInner,
   eatSomethingContainer,
   eatSomething,
+  addItemButtonContainer,
 } = styles;
 
 import GlobalStyles from "../../config/globalStyles";
@@ -196,7 +198,7 @@ function FoodJournal({ navigation }) {
   };
 
   return (
-    <>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <View style={container}>
         <View style={dayContainer}>
           <TouchableOpacity onPress={() => handleDayChange("left")}>
@@ -247,12 +249,23 @@ function FoodJournal({ navigation }) {
           </View>
         )}
       </View>
-      <ActionButton
+      <View style={addItemButtonContainer}>
+        <Button
+          title="Add item"
+          buttonStyle="green"
+          onPress={() => setModalVisible(true)}
+          style={{ height: 45 }}
+          labelStyle={{ fontSize: 18 }}
+        >
+          Add item
+        </Button>
+      </View>
+      {/* <ActionButton
         buttonColor={green}
         hideShadow={true}
         onPress={() => setModalVisible(true)}
         renderIcon={() => <AntDesign name="plus" size={28} color="#fff" />}
-      />
+      /> */}
       <NewItemModal
         visible={modalVisible}
         closeModal={() => setModalVisible(false)}
@@ -262,12 +275,11 @@ function FoodJournal({ navigation }) {
         <EditItemModal
           visible={editModalVisible}
           closeModal={() => setEditModalVisible(false)}
-          // addItemToList={addItemToList}
           item={editingItem}
           updateItem={updateItem}
         />
       )}
-    </>
+    </SafeAreaView>
   );
 }
 
