@@ -1,6 +1,6 @@
 import "react-native-gesture-handler";
 import React from "react";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { MenuProvider } from "react-native-popup-menu";
 
@@ -9,9 +9,17 @@ import { JournalProvider } from "./context/JournalContext";
 
 import AppNavigator from "./navigation";
 
+const Theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: "#ffffff",
+  },
+};
+
 export default function App() {
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={Theme}>
       <SafeAreaProvider>
         <MenuProvider>
           <JournalProvider>

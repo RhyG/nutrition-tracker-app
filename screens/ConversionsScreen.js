@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Platform,
+} from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import DropDownPicker from "react-native-dropdown-picker";
 
@@ -46,7 +55,10 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: "white",
     flex: 1,
+  },
+  contentContainer: {
     paddingHorizontal: 20,
+    flex: 1,
   },
   fieldsContainer: {
     flexDirection: "row",
@@ -107,7 +119,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const defaultData = { age: "", weight: "", height: "", gender: "M", activityMultiplier: 0 };
+const defaultData = { age: "", weight: "", height: "", gender: "M", activityMultiplier: 1.2 };
 
 function Conversions() {
   const [activityLevel, setActivityLevel] = useState(activityLevels[0]);
@@ -155,100 +167,116 @@ function Conversions() {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.tdeeContainer}>
-        <Text style={styles.title}>Calculate TDEE</Text>
-        <View style={styles.tdeeFields}>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Age</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="26"
-              onChangeText={(text) => handleCalculatorChange("age", text)}
-              value={String(data.age)}
-            />
-          </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Weight (kg)</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="74kg"
-              onChangeText={(text) => handleCalculatorChange("weight", text)}
-              value={String(data.weight)}
-            />
-          </View>
-          <View style={styles.fieldContainer}>
-            <Text style={[styles.fieldLabel, mtop20]}>Height (cm)</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="178cm"
-              onChangeText={(text) => handleCalculatorChange("height", text)}
-              value={String(data.height)}
-            />
-          </View>
-          <View style={[styles.fieldContainer, mtop20]}>
-            <Text style={styles.fieldLabel}>Gender</Text>
-            <View style={styles.radiosContainer}>
-              <RadioButton
-                label="Male"
-                selected={data.gender === "M"}
-                onPress={() => handleCalculatorChange("gender", "M")}
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : null}
+      keyboardVerticalOffset={80}
+    >
+      <View style={styles.contentContainer}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={{ flex: 1, justifyContent: "flex-end" }}>
+            <View style={styles.tdeeContainer}>
+              <Text style={styles.title}>Calculate TDEE</Text>
+              <View style={styles.tdeeFields}>
+                <View style={styles.fieldContainer}>
+                  <Text style={styles.fieldLabel}>Age</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="26"
+                    onChangeText={(text) => handleCalculatorChange("age", text)}
+                    value={String(data.age)}
+                    keyboardType="number-pad"
+                  />
+                </View>
+                <View style={styles.fieldContainer}>
+                  <Text style={styles.fieldLabel}>Weight (kg)</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="74kg"
+                    onChangeText={(text) => handleCalculatorChange("weight", text)}
+                    value={String(data.weight)}
+                    keyboardType="number-pad"
+                  />
+                </View>
+                <View style={styles.fieldContainer}>
+                  <Text style={[styles.fieldLabel, mtop20]}>Height (cm)</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="178cm"
+                    onChangeText={(text) => handleCalculatorChange("height", text)}
+                    value={String(data.height)}
+                    keyboardType="number-pad"
+                  />
+                </View>
+                <View style={[styles.fieldContainer, mtop20]}>
+                  <Text style={styles.fieldLabel}>Gender</Text>
+                  <View style={styles.radiosContainer}>
+                    <RadioButton
+                      label="Male"
+                      selected={data.gender === "M"}
+                      onPress={() => handleCalculatorChange("gender", "M")}
+                    />
+                    <RadioButton
+                      label="Female"
+                      selected={data.gender === "F"}
+                      onPress={() => handleCalculatorChange("gender", "F")}
+                    />
+                  </View>
+                </View>
+              </View>
+              <Text style={[styles.fieldLabel, mtop20]}>Activity level</Text>
+              <DropDownPicker
+                items={activityLevels}
+                defaultValue={activityLevel.value}
+                containerStyle={{ height: 40 }}
+                style={{ backgroundColor: "#fafafa" }}
+                dropDownStyle={{ backgroundColor: "#fafafa" }}
+                onChangeItem={(item) => {
+                  setActivityLevel(item);
+                  handleCalculatorChange("activityMultiplier", item.multiplier);
+                }}
+                labelStyle={styles.pickerLabel}
               />
-              <RadioButton
-                label="Female"
-                selected={data.gender === "F"}
-                onPress={() => handleCalculatorChange("gender", "F")}
-              />
+              <Button title="Calculate TDEE" onPress={calculateTDEE} buttonStyle="green" style={[mtop20]}>
+                Calculate TDEE
+              </Button>
+              <View style={[styles.resultContainer]}>
+                {TDEE && <Text style={[styles.result]}>Your TDEE is {TDEE} calories</Text>}
+              </View>
             </View>
+            <View style={styles.convertEnergyContainer}>
+              <Text style={styles.title}>Convert Kilojoules to Calories</Text>
+              <View style={styles.fieldsContainer}>
+                <View style={styles.fieldContainer}>
+                  <Text style={styles.fieldLabel}>Calories</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Calories"
+                    onChangeText={handleCalorieChange}
+                    value={String(calories)}
+                    keyboardType="number-pad"
+                  />
+                </View>
+                <View style={styles.fieldContainer}>
+                  <Text style={styles.fieldLabel}>Kilojoules</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder="Kilojoules (kj)"
+                    onChangeText={handleKilojouleChange}
+                    value={String(kj)}
+                    keyboardType="number-pad"
+                  />
+                </View>
+              </View>
+              <Text style={styles.caption}>
+                Formula: 1 Cal = 4.184 kJ, rounded to the nearest whole number
+              </Text>
+            </View>
+            <View style={{ flex: 1 }} />
           </View>
-        </View>
-        <Text style={[styles.fieldLabel, mtop20]}>Activity level</Text>
-        <DropDownPicker
-          items={activityLevels}
-          defaultValue={activityLevel.value}
-          containerStyle={{ height: 40 }}
-          style={{ backgroundColor: "#fafafa" }}
-          dropDownStyle={{ backgroundColor: "#fafafa" }}
-          onChangeItem={(item) => {
-            setActivityLevel(item);
-            handleCalculatorChange("activityMultiplier", item.multiplier);
-          }}
-          labelStyle={styles.pickerLabel}
-        />
-        <Button title="Calculate TDEE" onPress={calculateTDEE} buttonStyle="green" style={[mtop20]}>
-          Calculate TDEE
-        </Button>
-        <View style={[styles.resultContainer]}>
-          {TDEE && <Text style={[styles.result]}>Your TDEE is {TDEE} calories</Text>}
-        </View>
+        </TouchableWithoutFeedback>
       </View>
-      <View style={styles.convertEnergyContainer}>
-        <Text style={styles.title}>Convert Kilojoules to Calories</Text>
-        <View style={styles.fieldsContainer}>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Calories</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Calories"
-              onChangeText={handleCalorieChange}
-              value={String(calories)}
-              keyboardType="number-pad"
-            />
-          </View>
-          <View style={styles.fieldContainer}>
-            <Text style={styles.fieldLabel}>Kilojoules</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Kilojoules (kj)"
-              onChangeText={handleKilojouleChange}
-              value={String(kj)}
-              keyboardType="number-pad"
-            />
-          </View>
-        </View>
-        <Text style={styles.caption}>Formula: 1 Cal = 4.184 kJ, rounded to the nearest whole number</Text>
-      </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

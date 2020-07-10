@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
   eatSomething: {
     color: darkGrey,
     fontWeight: "bold",
-    fontSize: 22,
+    fontSize: 18,
   },
   addItemButtonContainer: {
     paddingHorizontal: 30,

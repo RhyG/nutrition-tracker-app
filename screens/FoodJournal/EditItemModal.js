@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View, Modal, StyleSheet, Text, TextInput } from "react-native";
+import { View, Modal, StyleSheet, Text, TextInput, KeyboardAvoidingView } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview";
 import shortid from "shortid";
 
 import Button from "../../components/Button";
@@ -67,18 +68,6 @@ const defaultItem = {
   protein: "",
 };
 
-const checkAllFields = (fields) => {
-  let valid;
-
-  Object.values(fields).forEach((item) => {
-    if (item.length > 0) {
-      valid = true;
-    }
-  });
-
-  return valid;
-};
-
 export default function EditItemModal({ visible, closeModal, updateItem, item }) {
   const [editingItem, setEditingItem] = useState(item);
 
@@ -113,6 +102,7 @@ export default function EditItemModal({ visible, closeModal, updateItem, item })
             onChangeText={(text) => handleChange(text, "food")}
             value={editingItem.food}
             style={styles.input}
+            returnKeyType="next"
           />
           <Text style={[styles.inputLabel, { marginTop: 10 }]}>Calories</Text>
           <TextInput
@@ -127,6 +117,7 @@ export default function EditItemModal({ visible, closeModal, updateItem, item })
             value={String(editingItem.protein)}
             style={styles.input}
             keyboardType="number-pad"
+            returnKeyType="next"
           />
           <View style={styles.actionsContainer}>
             <Button title="Close" onPress={handleClose} containerStyle={styles.button} buttonStyle="green">
