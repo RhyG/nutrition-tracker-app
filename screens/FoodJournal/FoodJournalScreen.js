@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useLayoutEffect, useContext, useCallback, useRef } from "react";
-import { View, Text, TouchableOpacity, TouchableHighlight, SafeAreaView } from "react-native";
-import ActionButton from "react-native-action-button";
+import { View, Text, TouchableOpacity, TouchableHighlight, SafeAreaView, Dimensions } from "react-native";
 import format from "date-fns/format";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { MaterialIcons, AntDesign } from "react-native-vector-icons";
@@ -46,6 +45,8 @@ import GlobalStyles from "../../config/globalStyles";
 const { green, darkGrey, offWhite, headerStyle, mbottom10 } = GlobalStyles;
 
 const Stack = createStackNavigator();
+
+const { height: screenHeight } = Dimensions.get("window");
 
 const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 const today = format(new Date(), "EEEE");
@@ -202,11 +203,11 @@ function FoodJournal({ navigation }) {
       <View style={container}>
         <View style={dayContainer}>
           <TouchableOpacity onPress={() => handleDayChange("left")}>
-            <AntDesign name="left" size={26} color={darkGrey} />
+            <AntDesign name="left" size={26} color={day === "Monday" ? "#fff" : darkGrey} />
           </TouchableOpacity>
           <Text style={[currentDay]}>{day === today ? "Today" : day}</Text>
           <TouchableOpacity onPress={() => handleDayChange("right")}>
-            <AntDesign name="right" size={26} color={darkGrey} />
+            <AntDesign name="right" size={26} color={day === "Sunday" ? "#fff" : darkGrey} />
           </TouchableOpacity>
         </View>
         <View style={statsContainer}>
@@ -254,7 +255,7 @@ function FoodJournal({ navigation }) {
           title="Add item"
           buttonStyle="green"
           onPress={() => setModalVisible(true)}
-          style={{ height: 45 }}
+          style={{ height: 45, marginBottom: screenHeight < 670 ? 20 : 0 }}
           labelStyle={{ fontSize: 18 }}
         >
           Add item
