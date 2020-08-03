@@ -16,8 +16,8 @@ const { green, fontLightGrey } = globalStyles;
 const styles = StyleSheet.create({
   buttonContainer: {
     borderRadius: 8,
-    // paddingVertical: 10,
-    // paddingHorizontal: 24,
+    paddingVertical: 10,
+    paddingHorizontal: 24,
     justifyContent: "center",
   },
   buttonText: {
@@ -26,8 +26,8 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   touchable: {
-    paddingVertical: 10,
-    paddingHorizontal: 24,
+    // paddingVertical: 10,
+    // paddingHorizontal: 24,
     // flex: 1,
   },
 });
