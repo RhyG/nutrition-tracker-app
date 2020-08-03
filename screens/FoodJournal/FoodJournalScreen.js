@@ -203,11 +203,11 @@ function FoodJournal({ navigation }) {
       <View style={container}>
         <View style={dayContainer}>
           <TouchableOpacity onPress={() => handleDayChange("left")}>
-            <AntDesign name="left" size={26} color={day === "Monday" ? "#fff" : darkGrey} />
+            <AntDesign name="left" size={26} color={day === "Monday" ? offWhite : darkGrey} />
           </TouchableOpacity>
           <Text style={[currentDay]}>{day === today ? "Today" : day}</Text>
           <TouchableOpacity onPress={() => handleDayChange("right")}>
-            <AntDesign name="right" size={26} color={day === "Sunday" ? "#fff" : darkGrey} />
+            <AntDesign name="right" size={26} color={day === "Sunday" ? offWhite : darkGrey} />
           </TouchableOpacity>
         </View>
         <View style={statsContainer}>

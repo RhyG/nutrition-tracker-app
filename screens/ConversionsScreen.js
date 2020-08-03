@@ -117,6 +117,10 @@ const styles = StyleSheet.create({
     color: darkGrey,
     fontSize: 18,
   },
+  buttonContainer: {
+    ...mtop20,
+    paddingVertical: Platform.OS === "android" ? 12 : 0,
+  },
 });
 
 const defaultData = { age: "", weight: "", height: "", gender: "M", activityMultiplier: 1.2 };
@@ -237,7 +241,12 @@ function Conversions() {
                 }}
                 labelStyle={styles.pickerLabel}
               />
-              <Button title="Calculate TDEE" onPress={calculateTDEE} buttonStyle="green" style={[mtop20]}>
+              <Button
+                title="Calculate TDEE"
+                onPress={calculateTDEE}
+                buttonStyle="green"
+                style={[styles.buttonContainer]}
+              >
                 Calculate TDEE
               </Button>
               <View style={[styles.resultContainer]}>
